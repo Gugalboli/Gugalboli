@@ -1,0 +1,31 @@
+{
+  "slug": "base-viva",
+  "ordem": 1,
+  "titulo": "Base viva de conhecimento",
+  "apelido": "Graph Knowledge to Action",
+  "linha": "Duas bases em Markdown que guardam o que vale hoje, de onde veio e o que já se aprendeu — para pessoas e agentes de IA começarem do que já se sabe.",
+  "card": "Decisões dispersas viram um estado com lastro; cada análise devolve conhecimento reutilizável.",
+  "sintese": {
+    "contexto": "Projeto de IA aplicada à cobrança num grupo de educação superior. Decisões ficavam espalhadas em reuniões e pessoas, versões do estado divergiam e análises repetiam investigação ou herdavam armadilhas dos dados.",
+    "contribuicao": "Concebi e construí os dois grafos e as rotinas que os mantêm vivos. Usados por vários consultores em frentes distintas e por agentes de IA.",
+    "evidencia": "2 grafos complementares em uso, em gestão/análises e em investigações iterativas.",
+    "evidencia_tags": ["em uso", "autoria pessoal"]
+  },
+  "passos": [
+    { "rotulo": "Disperso", "titulo": "O contexto morava em reuniões e pessoas.", "texto": "Cada decisão tinha uma versão diferente dependendo de quem se perguntava. Uma análise nova começava do zero — ou repetia uma armadilha dos dados que alguém já tinha encontrado." },
+    { "rotulo": "Duas bases", "titulo": "Duas perguntas diferentes, duas bases.", "texto": "Uma base de gestão e análises responde o que está decidido, em risco ou pendente — transcrições de reunião alimentam o estado. Uma base analítica, num repositório GitLab ligado ao CLI do Databricks, responde como analisar cada tabela corretamente: métodos, queries, armadilhas." },
+    { "rotulo": "O que vale hoje", "titulo": "O que vale hoje, com lastro — sem apagar o histórico.", "texto": "Cada nota guarda o estado vigente e preserva o que foi superado. Cada afirmação carrega fonte e nível de evidência. Índices curtos orientam a leitura: abre-se só o necessário. Scripts e verificações determinísticas cuidam da integridade." },
+    { "rotulo": "De volta", "titulo": "A análise termina. O aprendizado fica.", "texto": "Toda reunião, análise ou correção termina atualizando o lugar certo. A IA extrai, propõe e rascunha; o consultor decide. Um ciclo semanal de skills foi testado e não ficou: o que permaneceu foram as transcrições e a revisão periódica." }
+  ],
+  "fechamento": {
+    "titulo": "Duas bases em uso; o ganho ainda não foi medido.",
+    "numeros": [
+      { "valor": "2", "descricao": "grafos complementares — gestão/análises e conhecimento analítico", "natureza": ["em uso", "autoria pessoal"] }
+    ],
+    "lacuna": "Ganho de tempo ou de custo ainda não quantificado. A base não tem medição consolidada de horas, tokens ou erros evitados — e não vou inventar um percentual.",
+    "notas": [
+      "Não é banco de grafo, embeddings nem GraphRAG: são arquivos Markdown com tipos, propriedades e relações.",
+      "Os resultados financeiros do projeto de cobrança não são atribuídos a esta base."
+    ]
+  }
+}

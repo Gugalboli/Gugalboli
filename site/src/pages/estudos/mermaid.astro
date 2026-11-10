@@ -35,7 +35,7 @@ const srcOf = (n: (typeof nodes)[number]) => {
 <Base title={`${e.titulo} — estudo de cena · Gustavo Albuquerque`}>
   <main id="conteudo">
     <header class="case-head">
-      <p class="crumbs"><a href={`${base}/`}>← estudos</a> <span class="eyebrow">Entrega 04 · cena de estudo</span></p>
+      <p class="crumbs"><a href={`${base}/estudos/`}>← estudos</a> <span class="eyebrow">Entrega 04 · cena de estudo</span></p>
       <h1 class="serif">{e.titulo}</h1>
       <p class="linha">{e.linha}</p>
       <dl class="synth">
@@ -175,7 +175,7 @@ const srcOf = (n: (typeof nodes)[number]) => {
         <p>{e.fechamento.contexto_projeto}</p>
         <p class="tags">{e.fechamento.contexto_natureza.map((t) => <span class="tag">{t}</span>)}</p>
       </aside>
-      <p class="nav-next"><a href={`${base}/estudos/a`}>← Estudo A</a> · <a href={`${base}/estudos/b`}>Estudo B</a> · <a href={`${base}/`}>Todos os estudos</a></p>
+      <p class="nav-next"><a href={`${base}/estudos/a`}>← Estudo A</a> · <a href={`${base}/estudos/b`}>Estudo B</a> · <a href={`${base}/estudos/`}>Todos os estudos</a></p>
     </section>
   </main>
 </Base>

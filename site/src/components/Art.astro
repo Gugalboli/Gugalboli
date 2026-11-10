@@ -1,0 +1,98 @@
+---
+/**
+ * Ilustração de cada entrega (SVG estático, sem texto rasterizado).
+ * Gramática: poucas formas geométricas + retícula de pontos + um objeto vermelho.
+ * Os grupos .mv se deslocam no hover/foco do cartão (resposta à interação).
+ */
+interface Props { slug: string; class?: string }
+const { slug, class: cls = '' } = Astro.props;
+type D = { x: number; y: number; r: number };
+const grid = (x0: number, y0: number, cols: number, rows: number, sp: number, r: number): D[] =>
+  Array.from({ length: cols * rows }, (_, i) => ({ x: x0 + (i % cols) * sp, y: y0 + Math.floor(i / cols) * sp, r }));
+const arc = (x0: number, y0: number, x1: number, y1: number, lift: number, n: number, r: number): D[] =>
+  Array.from({ length: n }, (_, i) => {
+    const t = i / (n - 1);
+    return { x: x0 + (x1 - x0) * t, y: y0 + (y1 - y0) * t - Math.sin(Math.PI * t) * lift, r };
+  });
+const line = (x0: number, y0: number, x1: number, n: number, r: number): D[] => arc(x0, y0, x1, y0, 0, n, r);
+const dots = (d: D[]) => d.map((p) => `M${(p.x + p.r).toFixed(1)} ${p.y.toFixed(1)}a${p.r} ${p.r} 0 1 0 ${-2 * p.r} 0a${p.r} ${p.r} 0 1 0 ${2 * p.r} 0`).join('');
+---
+<svg class={`art art--${slug} ${cls}`} viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+  {slug === 'base-viva' && (
+    <>
+      <path d="M40 120 L150 95 L150 215 L40 240 Z" class="stone" />
+      <path d="M250 95 L360 120 L360 240 L250 215 Z" class="stone2" />
+      <g class="mv mv-a"><path d={dots(arc(120, 130, 280, 130, 70, 26, 2.2))} class="ink" /></g>
+      <g class="mv mv-b"><path d={dots(arc(280, 190, 120, 190, -55, 22, 2.2))} class="ink" /></g>
+      <path d={dots(grid(62, 150, 6, 5, 11, 2.4))} class="ink" />
+      <path d={dots(grid(282, 150, 6, 5, 11, 2.4))} class="ink" />
+      <circle cx="200" cy="244" r="9" class="red mv mv-r" />
+    </>
+  )}
+  {slug === 'speech-analytics' && (
+    <>
+      <rect x="34" y="70" width="110" height="38" rx="19" class="stone" />
+      <rect x="64" y="122" width="100" height="38" rx="19" class="stone2" />
+      <g class="mv mv-r"><circle cx="96" cy="141" r="4.5" class="red" /><circle cx="114" cy="141" r="4.5" class="red" /><circle cx="132" cy="141" r="4.5" class="red" /></g>
+      <g class="mv mv-a"><path d={dots(line(176, 120, 222, 6, 2))} class="ink" /></g>
+      <path d={dots(grid(232, 84, 6, 6, 12, 2.4))} class="ink" />
+      <g class="mv mv-b">
+        <path d={dots(arc(300, 110, 340, 80, 6, 6, 1.8))} class="ink" />
+        <path d={dots(arc(300, 140, 340, 200, -6, 7, 1.8))} class="ink" />
+        <rect x="346" y="58" width="8" height="26" class="inkfill" /><rect x="358" y="48" width="8" height="36" class="inkfill" /><rect x="370" y="66" width="8" height="18" class="inkfill" />
+        <path d="M346 196 h34 M346 206 h28 M346 216 h34" class="stroke" />
+      </g>
+    </>
+  )}
+  {slug === 'motor-comentarios' && (
+    <>
+      <path d="M20 70 L170 90 L170 230 L20 250 Z" class="stone" />
+      <path d="M380 70 L230 90 L230 230 L380 250 Z" class="stone2" />
+      <circle cx="200" cy="150" r="58" class="ring" />
+      <g class="mv mv-a">
+        <path d={dots(grid(176, 132, 5, 3, 12, 2.6))} class="ink" />
+        <path d="M182 168 l-6 14 l16 -10 z" class="inkfill" />
+      </g>
+      <path d={dots((Array.from({ length: 28 }, (_, i) => ({ x: 200 + Math.cos((i / 28) * Math.PI * 2) * 58, y: 150 + Math.sin((i / 28) * Math.PI * 2) * 58, r: 2 }))) as D[])} class="ink" />
+      <path d="M200 208 V258 H286" class="redline mv mv-r" />
+      <rect x="286" y="248" width="20" height="20" class="red mv mv-r" />
+    </>
+  )}
+  {slug === 'tradutor-mermaid' && (
+    <>
+      <rect x="28" y="52" width="140" height="196" class="stone" />
+      <g class="mv mv-a">
+        <path d={dots(line(46, 80, 150, 12, 1.9))} class="ink" />
+        <path d={dots(line(46, 106, 130, 10, 1.9))} class="ink" />
+        <path d={dots(line(46, 132, 150, 12, 1.9))} class="ink" />
+        <path d={dots(line(46, 158, 118, 9, 1.9))} class="ink" />
+        <path d={dots(line(46, 184, 142, 11, 1.9))} class="ink" />
+      </g>
+      <g class="mv mv-b">
+        <rect x="222" y="60" width="110" height="30" rx="3" class="node" />
+        <rect x="222" y="120" width="110" height="30" rx="3" class="node node--red" />
+        <rect x="222" y="180" width="110" height="30" rx="3" class="node" />
+        <path d="M277 90 V120 M277 150 V180 M277 210 V240" class="stroke" />
+      </g>
+      <rect x="342" y="112" width="34" height="46" class="red mv mv-r" />
+    </>
+  )}
+</svg>
+
+<style>
+  .art { width: 100%; height: auto; overflow: visible; }
+  .stone { fill: var(--stone); }
+  .stone2 { fill: #cfc8bd; }
+  .ink { fill: var(--ink); }
+  .inkfill { fill: var(--ink); }
+  .red { fill: var(--red); }
+  .stroke { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+  .redline { fill: none; stroke: var(--red); stroke-width: 2; }
+  .ring { fill: none; stroke: none; }
+  .node { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 0.1 5; stroke-linecap: round; }
+  .node--red { stroke: var(--red); stroke-dasharray: none; }
+  .mv { transition: transform .7s var(--ease); transform-box: fill-box; }
+  :global(.card-link:hover) .mv-a, :global(.card-link:focus-visible) .mv-a { transform: translateX(6px); }
+  :global(.card-link:hover) .mv-b, :global(.card-link:focus-visible) .mv-b { transform: translateX(-6px); }
+  :global(.card-link:hover) .mv-r, :global(.card-link:focus-visible) .mv-r { transform: translateY(-6px); }
+</style>

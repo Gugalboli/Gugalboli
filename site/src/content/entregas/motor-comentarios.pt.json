@@ -1,0 +1,31 @@
+{
+  "slug": "motor-comentarios",
+  "ordem": 3,
+  "titulo": "Motor de análise de comentários",
+  "apelido": "Python + IA generativa",
+  "linha": "Antes de melhorar o atendimento, era preciso confiar no diagnóstico. Um motor que lê o conteúdo real dos comentários resolveu a divergência — e revelou um incentivo.",
+  "card": "O atendimento via positivo, o marketing via atrito. O motor leu o conteúdo real e achou a causa.",
+  "sintese": {
+    "contexto": "Projeto de atendimento em mídias sociais de um grupo de educação superior, com cerca de 120 mil atendimentos por ano. O atendimento reportava polaridade positiva ou neutra; o marketing via atrito alto.",
+    "contribuicao": "Construí o motor em Python com LLM que classifica polaridade e tema do conteúdo real, e o circuito de avaliação que o ajustou.",
+    "evidencia": "Acurácia conjunta reportada acima de 90% (polaridade e tema corretos no mesmo item); em produção.",
+    "evidencia_tags": ["reportado", "autoria pessoal"]
+  },
+  "passos": [
+    { "rotulo": "Duas leituras", "titulo": "O mesmo atendimento, duas leituras opostas.", "texto": "Pelo indicador do atendimento, as conversas eram positivas ou neutras. Pelo marketing, havia atrito alto. Sem resolver isso, qualquer plano de melhoria partiria de um diagnóstico em disputa." },
+    { "rotulo": "Leitura", "titulo": "Ler o que foi escrito, não o que foi marcado.", "texto": "O motor em Python envia cada comentário a um modelo de linguagem, que classifica a polaridade e o tema a partir do conteúdo real." },
+    { "rotulo": "Avaliação", "titulo": "Um circuito para confiar no motor.", "texto": "Revisão humana, pontuação por um segundo modelo e revisão do pior quartil — como triagem do que olhar primeiro, não como \"25% de erro\". Prompt e parâmetros ajustados a cada volta." },
+    { "rotulo": "A causa", "titulo": "A divergência também vinha do incentivo.", "texto": "O preenchimento do indicador estava ligado à remuneração variável. A equipe revisou os parâmetros da remuneração. O problema era de desenho, não de pessoas." }
+  ],
+  "fechamento": {
+    "titulo": "Um diagnóstico em que as áreas passaram a confiar.",
+    "numeros": [
+      { "valor": ">90%", "descricao": "de acurácia conjunta reportada — polaridade e tema corretos no mesmo item", "natureza": ["reportado", "amostra não informada"] },
+      { "valor": "~120 mil", "descricao": "atendimentos por ano no projeto", "natureza": ["escopo", "não é volume processado pelo motor"] }
+    ],
+    "notas": [
+      "Em produção; usado por marketing e pela gestão do atendimento; reutilizado em outros projetos.",
+      "Os parâmetros da remuneração variável foram revistos pela equipe — sem atribuir culpa a atendentes."
+    ]
+  }
+}

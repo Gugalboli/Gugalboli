@@ -1,0 +1,36 @@
+{
+  "slug": "speech-analytics",
+  "ordem": 2,
+  "titulo": "Speech analytics do agente de cobrança",
+  "apelido": "SQL + modelo interno no Databricks",
+  "linha": "Uma camada analítica que lê cada conversa do agente de IA e transforma o que acontece nelas em acompanhamento, causa raiz e backlog.",
+  "card": "Ninguém via o que acontecia nas conversas do agente. Agora cada transcrição responde ~15 perguntas.",
+  "sintese": {
+    "contexto": "A companhia acabara de implantar um agente conversacional no Salesforce, atendendo uma carteira equivalente a 30% de uma faixa de cobrança. Ninguém via o que acontecia nas conversas.",
+    "contribuicao": "Construí o fluxo em SQL no Databricks que aciona um modelo interno para responder cerca de 15 perguntas por transcrição, a tabela refinada, o dashboard e a tabela de causa raiz. O agente é da companhia; a camada analítica é minha, na visão de negócio.",
+    "evidencia": "Diagnóstico inicial: 40% dos atendimentos travavam nas primeiras versões do agente.",
+    "evidencia_tags": ["diagnóstico", "análise pessoal"]
+  },
+  "passos": [
+    { "rotulo": "Às cegas", "titulo": "Um agente novo, e ninguém lendo as conversas.", "texto": "O agente já atendia uma carteira real. Havia transcrições numa tabela, mas nenhuma leitura sistemática do que dava certo, onde travava e por quê." },
+    { "rotulo": "Perguntas", "titulo": "Cada transcrição responde ~15 perguntas.", "texto": "Um fluxo em SQL no Databricks aciona um modelo interno para cada conversa: houve travamento? Qual o motivo da recusa? Por que não negociou? Qual a polaridade? Faltou base de conhecimento? As respostas viram uma tabela refinada." },
+    { "rotulo": "Duas saídas", "titulo": "Uma tabela, duas leituras.", "texto": "Para a gestão, um dashboard de acompanhamento. Para os analistas, uma tabela de causa raiz que leva da taxa ao exemplo concreto." },
+    { "rotulo": "O achado", "titulo": "O agente perguntava, o cliente respondia — e ele parava.", "texto": "Nas primeiras versões, 40% dos atendimentos travavam: o agente ficava em \"estou verificando\" sem avançar. É um diagnóstico inicial do fluxo, não uma taxa de erro do modelo. Dali saiu um backlog priorizado de melhorias." }
+  ],
+  "fechamento": {
+    "titulo": "Do diagnóstico ao backlog — e à expansão da carteira.",
+    "numeros": [
+      { "valor": "40%", "descricao": "dos atendimentos travavam nas primeiras versões", "natureza": ["diagnóstico inicial", "não é taxa de erro do modelo"] },
+      { "valor": "30+", "descricao": "melhorias no backlog e roadmap de evolução do agente", "natureza": ["backlog", "não são 30 implementadas"] }
+    ],
+    "coletivos": {
+      "legenda": "Resultados do projeto; o speech analytics apoiou sua evolução, sem parcela exclusiva apurada.",
+      "itens": [
+        { "valor": "R$ 1 mi/ano", "descricao": "de economia com a internalização", "natureza": ["realizado", "anualizado", "coletivo"] },
+        { "valor": "R$ 9 mi/ano", "descricao": "de arrecadação incremental no conjunto dos canais digitais", "natureza": ["realizado", "anualizado", "coletivo"] }
+      ],
+      "aviso": "São medidas diferentes (custo e receita) e não devem ser somadas."
+    },
+    "notas": ["A carteira do agente foi expandida progressivamente, apoiada pelo acompanhamento de falhas e ajustes."]
+  }
+}

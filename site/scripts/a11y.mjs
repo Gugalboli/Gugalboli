@@ -5,7 +5,7 @@ const { chromium } = require(g + '/playwright');
 const { default: AxeBuilder } = await import('@axe-core/playwright');
 const base = process.argv[2] || 'http://localhost:4321';
 const b = await chromium.launch();
-for (const w of [390, 1440]) for (const p of ['/', '/estudos/a', '/estudos/b', '/estudos/mermaid']) {
+for (const w of [390, 1440]) for (const p of ['/', '/entregas/base-viva/', '/entregas/speech-analytics/', '/entregas/motor-comentarios/', '/entregas/tradutor-mermaid/', '/estudos/']) {
   const ctx = await b.newContext({ viewport: { width: w, height: 900 } }); const page = await ctx.newPage();
   await page.goto(base + p, { waitUntil: 'networkidle' });
   const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();

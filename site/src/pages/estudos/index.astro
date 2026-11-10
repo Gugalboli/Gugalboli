@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const estudos = [
+  {
+    href: '/estudos/a', n: 'A', titulo: 'O ponto de apoio',
+    ideia: 'A metáfora física, levada a sério: uma alavanca de pontos sobre um fulcro vermelho sólido. O visitante move o apoio e vê o mesmo esforço mover um efeito maior. O triângulo vermelho é sempre o julgamento humano — e ele persiste, virando cone de foco, pilar da passagem, base da decisão e seta do ciclo nos quatro capítulos.',
+    refs: 'Illuminare (figura de pontos que reage ao ponteiro) · sete imagens de geometria editorial (fulcro, cone de luz, travessia) · Ciechanowski (mexa no mecanismo) · Extrace (palco persistente).',
+    porque: 'Para produto, mostra uma tese com um mecanismo manipulável — não um slogan.',
+  },
+  {
+    href: '/estudos/b', n: 'B', titulo: 'A equação',
+    ideia: 'A abertura como página de publicação: U = L · t composto em três colunas. Um trecho de tempo vermelho (sempre igual) × camadas de repertório em pontos (negócio, técnica, IA, ativáveis) = uma esfera de efeito com núcleo vermelho. Menos metáfora, mais diagrama.',
+    refs: 'Stripe Press (hierarquia editorial) · The Pudding (número com legenda ao lado) · Decade (ideia abstrata por relação espacial) · Linear Method (texto curto, sensação de ferramenta).',
+    porque: 'Para produto, lê como um modelo mental explícito e testável, como uma boa spec.',
+  },
+  {
+    href: '/estudos/mermaid', n: 'C', titulo: 'Cena de entrega: tradutor de transcrições',
+    ideia: 'Palco persistente com rolagem: falas sublinhadas viram pontos, os pontos formam os nós do fluxo, uma ponderação vermelha da equipe insere a etapa que faltava, os contornos ficam sólidos na versão consolidada. Fechamento fora do palco: 4 vs. 2 meses na mesma escala, com natureza do número ao lado.',
+    refs: 'Extrace (o objeto se transforma; ao subir, recua) · Pudding/NYT (legenda honesta junto ao dado).',
+    porque: 'Mostra o mecanismo, a contribuição pessoal e a revisão humana antes do número.',
+  },
+];
+---
+<Base title="Fase 1 — Estudos de direção · Gustavo Albuquerque">
+  <main id="conteudo" class="wrap">
+    <p class="eyebrow">Portfólio · Fase 1 · para avaliação do Gustavo</p>
+    <h1 class="serif">Estudos de direção de arte</h1>
+    <p class="intro">Duas propostas distintas para a primeira tela e uma cena de entrega, com conteúdo real, paleta e tipografia propostas. A escultura de pontos responde ao ponteiro (ou toque) e, no estudo A, muda de forma com a rolagem. Nada aqui é o site final.</p>
+    <ol class="list">
+      {estudos.map((e) => (
+        <li>
+          <a href={`${base}${e.href}`} class="item">
+            <span class="n serif">{e.n}</span>
+            <span class="body">
+              <span class="t serif">{e.titulo} <span aria-hidden="true">→</span></span>
+              <span class="d">{e.ideia}</span>
+              <span class="r"><span class="eyebrow">De onde vem</span> {e.refs}</span>
+              <span class="r"><span class="eyebrow">Por que serve</span> {e.porque}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <p class="foot">Tipografia: Schibsted Grotesk (texto e interface), Newsreader (títulos editoriais), IBM Plex Mono (legendas, rótulos e naturezas dos números). Paleta: off-white quente, cinzas, grafite e um vermelho profundo (#910808) como acento.</p>
+  </main>
+</Base>
+<style>
+  .wrap { max-width: 980px; margin: 0 auto; padding: 48px var(--gutter) 96px; }
+  h1 { font-size: var(--step-4); font-weight: 400; line-height: 1; margin: 8px 0 20px; letter-spacing: -0.02em; }
+  .intro { font-size: var(--step-1); color: var(--ink-2); max-width: 60ch; line-height: 1.4; }
+  .list { list-style: none; padding: 0; margin: 48px 0 0; border-top: 1px solid var(--ink); }
+  .list li { border-bottom: 1px solid var(--line); }
+  .item { display: grid; grid-template-columns: 3.5rem 1fr; gap: 16px; padding: 28px 0; text-decoration: none; }
+  .item:hover { color: inherit; }
+  .item:hover .t, .item:hover .n { color: var(--red); }
+  .n { font-size: var(--step-3); line-height: 1; color: var(--ink-3); transition: color .2s; }
+  .body { display: grid; gap: 10px; }
+  .t { font-size: var(--step-2); line-height: 1.1; transition: color .2s; }
+  .d { color: var(--ink); max-width: 68ch; }
+  .r { color: var(--ink-2); font-size: 0.92rem; max-width: 68ch; }
+  .r .eyebrow { margin-right: 6px; }
+  .foot { margin-top: 40px; color: var(--ink-3); font-size: var(--step--1); max-width: 70ch; }
+</style>

@@ -1,0 +1,529 @@
+---
+/**
+ * Página única. Abertura (mecanismo do estudo A + hierarquia editorial do B) → a ideia em
+ * movimento (escultura persistente) → entregas em matriz, abertas no lugar → trajetória →
+ * sobre → contato. `open` renderiza uma entrega já aberta (URL compartilhável / sem JS).
+ */
+import c from '../content/abertura.pt.json';
+import t from '../content/trajetoria.pt.json';
+import Art from './Art.astro';
+import Painel from './Painel.astro';
+const mods = import.meta.glob('../content/entregas/*.pt.json', { eager: true }) as Record<string, any>;
+const entregas = Object.entries(mods)
+  .filter(([k]) => !k.includes('/mermaid.pt.json'))
+  .map(([, m]) => m.default ?? m)
+  .sort((a, b) => a.ordem - b.ordem);
+interface Props { open?: string }
+const { open } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const openE = entregas.find((e) => e.slug === open);
+const artText = [
+  'Uma alavanca feita de pontos apoiada num triângulo vermelho sólido. Na ponta longa, uma pequena figura humana (o esforço); na ponta curta, uma esfera de pontos (o efeito). Quanto mais camadas de repertório ativas, mais perto do efeito fica o apoio e maior a esfera — a figura não muda.',
+  'O triângulo vermelho vira um cone de luz. Sob ele, os pontos formam um bloco organizado; fora dele, ficam dispersos.',
+  'Duas margens cinzas, rotuladas negócio e técnica, e uma passagem de pontos construída entre elas, apoiada num pilar vermelho. Uma figura atravessa.',
+  'Três placas de pontos empilhadas sobre uma base vermelha, ao lado de uma figura; um fluxo de pontos sai para a direita, rotulado em uso.',
+  'Os pontos formam um anel com uma seta vermelha; no centro, uma grade densa de pontos acumulados.',
+];
+const year = (v: number) => Math.floor(v);
+const tl0 = 2021.5, tl1 = 2027;
+const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
+---
+<header class="topbar" data-topbar>
+  <a class="tb-name" href={`${base}/#abertura`}>{c.nome}</a>
+  <nav aria-label="Seções">
+    <a href={`${base}/#ideia`}>Ideia</a><a href={`${base}/#entregas`}>Entregas</a><a href={`${base}/#trajetoria`}>Trajetória</a><a href={`${base}/#sobre`}>Sobre</a><a href={`${base}/#contato`}>Contato</a>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <!-- ============ ABERTURA + IDEIA (palco persistente) ============ -->
+  <section class="story" data-story aria-label="Abertura e a ideia de alavancagem">
+    <div class="stage">
+      <canvas class="art" role="img" aria-label={artText[0]} data-art></canvas>
+      <div class="labels" aria-hidden="true" data-labels></div>
+      <nav class="rail" aria-label="Capítulos da ideia">
+        <a href="#abertura" data-rail="0"><span>00</span> Alavancagem</a>
+        {c.capitulos.map((k, i) => <a href={`#cap-${k.n}`} data-rail={i + 1}><span>{k.n}</span> {k.titulo}</a>)}
+      </nav>
+    </div>
+
+    <div class="track">
+      <div class="hero" id="abertura" data-block="0">
+        <div class="mast">
+          <p class="who"><strong>{c.nome}</strong><span>{c.atuacao}</span><span class="loc">{c.local}</span></p>
+          <nav aria-label="Seções" class="mast-nav">
+            <a href="#entregas">Entregas</a><a href="#trajetoria">Trajetória</a><a href="#contato">Contato</a>
+          </nav>
+        </div>
+
+        <div class="lead">
+          <h1 class="serif">{c.definicao}</h1>
+          <div class="lead-r">
+            <p class="prop">{c.proposta}</p>
+            <p class="cta">
+              <a class="btn btn--ink" href="#entregas">Ver as 4 entregas</a>
+              <a class="btn" href={`mailto:${c.contato.email}`}>Conversar</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="art-box" data-art-box aria-hidden="true"></div>
+
+        <div class="eq" role="group" aria-labelledby="eq-cap">
+          <div class="key key-t"><span class="sym serif">t</span><span>esforço — o mesmo, sempre</span></div>
+          <div class="key key-l">
+            <span class="sym serif">L</span><span>alavancagem — o repertório que desloca o apoio</span>
+            <div class="toggles" role="group" aria-label="Camadas de repertório">
+              <button type="button" aria-pressed="true" data-layer="0">Negócio</button>
+              <button type="button" aria-pressed="true" data-layer="1">Técnica</button>
+              <button type="button" aria-pressed="true" data-layer="2">IA</button>
+            </div>
+          </div>
+          <div class="key key-u"><span class="sym serif">U</span><span>efeito — cresce com L, a partir do mesmo t</span></div>
+          <p id="eq-cap" class="illus eq-cap">{c.formula.expr} · {c.formula.legenda} {c.formula.fonte} <output class="mono" aria-live="polite" data-readout></output></p>
+        </div>
+
+        <ol class="index">
+          {c.sinteses.map((s, i) => (
+            <li><a href={s.href}><span class="mono n">0{i + 1}</span><span class="eyebrow">{s.rotulo}</span><span class="t">{s.texto}</span></a></li>
+          ))}
+        </ol>
+      </div>
+
+      <div id="ideia" class="ideia-anchor"></div>
+      {c.capitulos.map((k, i) => (
+        <article class="chapter" id={`cap-${k.n}`} data-block={i + 1}>
+          <div class="card">
+            <p class="eyebrow"><span class="num">{k.n}</span> {k.titulo}</p>
+            <h2 class="serif">{k.frase}</h2>
+            <p>{k.texto}</p>
+            <p class="visually-hidden">Ilustração: {artText[i + 1]}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============ ENTREGAS ============ -->
+  <section class="sec entregas" id="entregas" aria-labelledby="h-entregas">
+    <div class="sec-head">
+      <p class="eyebrow">Entregas em uso</p>
+      <h2 class="serif" id="h-entregas">Quatro construções que outras pessoas usam para decidir.</h2>
+      <p class="sec-sub">Cada uma tem um mecanismo diferente. Abra para ver o problema, o que construí, como funciona e o que cada número mede.</p>
+    </div>
+    <ul class="grid">
+      {entregas.map((e, i) => (
+        <li class="cell">
+          <a class="card-link" href={`${base}/entregas/${e.slug}/`} data-open={e.slug} aria-describedby={`cd-${e.slug}`}>
+            <span class="cell-art" data-card-art={e.slug}><Art slug={e.slug} /></span>
+            <span class="cell-meta">
+              <span class="mono cell-n">0{i + 1}</span>
+              <span class="cell-t serif">{e.titulo}</span>
+              <span class="cell-d" id={`cd-${e.slug}`}>{e.card}</span>
+              <span class="cell-ev">{e.sintese.evidencia} {e.sintese.evidencia_tags.map((tg: string) => <span class="tag">{tg}</span>)}</span>
+              <span class="cell-go" aria-hidden="true">Abrir →</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ============ TRAJETÓRIA ============ -->
+  <section class="sec traj" id="trajetoria" aria-labelledby="h-traj">
+    <div class="sec-head">
+      <p class="eyebrow">Trajetória</p>
+      <h2 class="serif" id="h-traj">De quem reporta números para quem decide a quem constrói com IA.</h2>
+    </div>
+    <div class="ruler" aria-hidden="true">
+      {[2022, 2023, 2024, 2025, 2026].map((y) => <span class="tick mono" style={`left:${pos(y)}%`}>{y}</span>)}
+      {t.passagens.map((p) => <span class={`span span-${p.id}`} style={`left:${pos(p.inicio)}%; width:${pos(p.fim ?? 2026.9) - pos(p.inicio)}%`}></span>)}
+    </div>
+    <ol class="stops">
+      {t.passagens.map((p) => (
+        <li class={`stop stop-${p.id}`}>
+          <h3 class="stop-h">
+            <button type="button" aria-expanded={p.id === 'visagio' ? 'true' : 'false'} aria-controls={`st-${p.id}`} data-stop>
+              <span class="mono stop-p">{p.periodo}</span>
+              <span class="serif stop-o">{p.org}</span>
+              <span class="stop-r">{p.papel}</span>
+              <span class="stop-x" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="stop-body" id={`st-${p.id}`} data-stop-body>
+            <p class="stop-s">{p.resumo}</p>
+            {p.frentes.map((f: any) => (
+              <div class="front">
+                <h4>{f.titulo} {f.periodo && <span class="mono">· {f.periodo}</span>} {f.papel && <span class="mono">· {f.papel}</span>}</h4>
+                {f.cliente && <p class="client">Cliente: {f.cliente}</p>}
+                <ul>
+                  {f.itens.map((it: any) => (
+                    <li>
+                      {it.num && <span class="it-n serif">{it.num}</span>}
+                      <span>{it.t}</span>
+                      {it.natureza && <span class="tags">{it.natureza.map((tg: string, k: number) => <span class={`tag ${tg === 'realizado' ? 'tag--red' : ''}`}>{tg}</span>)}</span>}
+                    </li>
+                  ))}
+                </ul>
+                {f.aviso && <p class="muted">{f.aviso}</p>}
+                {f.entregas && <p class="front-links">Entregas: {f.entregas.map((s: string) => { const e = entregas.find((x) => x.slug === s); return <a href={`${base}/entregas/${s}/`} data-open={s}>{e?.titulo}</a>; })}</p>}
+              </div>
+            ))}
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div class="extra">
+      <div>
+        <h3 class="eyebrow">Formação</h3>
+        <ul>{t.formacao.map((f: any) => <li><span>{f.t}</span> <span class="mono">{f.periodo}</span>{f.nota && <span class="tag">{f.nota}</span>}</li>)}</ul>
+      </div>
+      <div>
+        <h3 class="eyebrow">Iniciativas pessoais e formativas</h3>
+        <ul>{t.pessoais.map((f: any) => <li><strong>{f.t}.</strong> {f.d}</li>)}</ul>
+      </div>
+      <div>
+        <h3 class="eyebrow">Ferramentas</h3>
+        <p class="stack">{t.stack.join(' · ')}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOBRE ============ -->
+  <section class="sec sobre" id="sobre" aria-labelledby="h-sobre">
+    <div class="sec-head">
+      <p class="eyebrow">Sobre · como trabalho <span class="tag tag--red">rascunho para revisão do Gustavo</span></p>
+      <h2 class="serif" id="h-sobre">Começo pelo critério de decisão. Construo para ser revisado.</h2>
+    </div>
+    <div class="sobre-cols">
+      <p>Sou formado em Administração e comecei do lado de quem prepara os números para quem decide. Hoje atuo como PO e PMO num núcleo de IA aplicada à cobrança. O que mais gosto é o momento em que um problema de negócio vira uma hipótese testável — e de construir a primeira versão da resposta, em SQL, Python ou com modelos de linguagem, para que a equipe possa revisar e decidir.</p>
+      <p>Acredito que a IA aproxima quem entende o problema de quem constrói a solução. Isso não dispensa julgamento: contexto, critério e revisão continuam sendo o trabalho. Por isso digo de onde vem cada número deste site — e deixo como lacuna o que ainda não foi medido.</p>
+      <ul class="how">
+        <li><strong>Critério antes da construção.</strong> O que precisa mudar, para quem, como vamos saber.</li>
+        <li><strong>Primeira versão revisável.</strong> Algo concreto para a equipe criticar cedo.</li>
+        <li><strong>Medir antes de declarar.</strong> Diagnóstico, meta e resultado têm nomes diferentes.</li>
+        <li><strong>Aprendizado no lugar certo.</strong> Para que o próximo trabalho comece de um ponto mais alto.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ CONTATO ============ -->
+  <section class="sec contato" id="contato" aria-labelledby="h-contato">
+    <p class="eyebrow">Contato</p>
+    <h2 class="serif" id="h-contato">Se você trabalha com produto, dados ou operações e quer conversar, escreva.</h2>
+    <p class="contact-links">
+      <a class="big-link serif" href={`mailto:${c.contato.email}`}>{c.contato.email}</a>
+      <a class="btn" href={c.contato.linkedin} rel="me noopener">LinkedIn</a>
+    </p>
+    <p class="foot mono">Rio de Janeiro · site feito com Astro, Canvas e muito pouco JavaScript · <a href={`${base}/estudos/`}>estudos de direção (fase 1)</a></p>
+  </section>
+</main>
+
+<!-- ============ PAINEL DA ENTREGA (abre no lugar) ============ -->
+<dialog class="sheet" data-sheet open={openE ? true : undefined} aria-labelledby={openE ? `t-${openE.slug}` : undefined}>
+  <div class="sheet-bar">
+    <a href={`${base}/#entregas`} class="sheet-back" data-close>← Entregas</a>
+    <span class="mono sheet-count" data-count>{openE ? `0${openE.ordem} / 04` : ''}</span>
+    <a href={`${base}/#entregas`} class="sheet-x" data-close aria-label="Fechar entrega">Fechar <span aria-hidden="true">✕</span></a>
+  </div>
+  {entregas.map((e, i) => (
+    <article class="panel" data-panel={e.slug} hidden={e.slug !== open ? true : undefined}>
+      <Painel e={e} idx={i} total={entregas.length} prev={entregas[(i + entregas.length - 1) % entregas.length]} next={entregas[(i + 1) % entregas.length]} base={base} />
+    </article>
+  ))}
+</dialog>
+
+<style>
+  /* ---------- barra superior (aparece depois da abertura) ---------- */
+  .topbar { position: fixed; inset: 0 0 auto 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px var(--gutter); background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); transform: translateY(-100%); transition: transform .4s var(--ease); font-size: var(--step--1); }
+  .topbar.is-on { transform: none; }
+  .topbar:focus-within { transform: none; }
+  .tb-name { font-weight: 600; text-decoration: none; }
+  .topbar nav { display: flex; gap: 16px; overflow-x: auto; }
+  .topbar nav a { text-decoration: none; white-space: nowrap; }
+
+  /* ---------- palco persistente ---------- */
+  .story { position: relative; }
+  .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  .art { width: 100%; height: 100%; touch-action: pan-y; }
+  .labels { position: absolute; inset: 0; pointer-events: none; }
+  .labels :global(span) { position: absolute; left: 0; top: 0; font: 500 .72rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+  .labels :global(span.ink) { color: var(--ink); }
+  .labels :global(span.red) { color: var(--red); }
+  .rail { position: absolute; left: var(--gutter); bottom: 24px; display: flex; flex-direction: column; gap: 4px; font: .72rem/1.3 var(--mono); opacity: 0; transition: opacity .4s var(--ease); pointer-events: none; }
+  .story.in-chapters .rail { opacity: 1; pointer-events: auto; }
+  .rail a { text-decoration: none; color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+  .rail a span { width: 2.2em; }
+  .rail a[aria-current='step'] { color: var(--ink); font-weight: 500; }
+  .rail a[aria-current='step'] span { color: var(--red); }
+  .rail a[aria-current='step']::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); margin-left: -14px; }
+  .track { position: relative; margin-top: -100svh; pointer-events: none; }
+  .track :global(:is(a, button, input, label, output)), .track .card, .track .prop, .track h1 { pointer-events: auto; }
+
+  /* ---------- abertura ---------- */
+  .hero { min-height: 100svh; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter) 18px; display: grid; grid-template-rows: auto auto minmax(250px, 1fr) auto auto; }
+  .mast { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 16px 0 10px; border-bottom: 1px solid var(--ink); }
+  .who { margin: 0; display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; font-size: var(--step--1); color: var(--ink-2); }
+  .who strong { font-size: 1rem; color: var(--ink); font-weight: 600; letter-spacing: -0.01em; }
+  .loc { color: var(--ink-3); }
+  .mast-nav { display: flex; gap: 18px; font-size: var(--step--1); }
+  .mast-nav a { text-decoration: none; }
+  .lead { display: grid; grid-template-columns: 1.25fr 1fr; column-gap: 48px; align-items: end; padding-top: clamp(16px, 3vh, 36px); }
+  .lead h1 { font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.6rem); font-weight: 400; line-height: .98; letter-spacing: -0.02em; margin: 0; }
+  .prop { margin: 0; color: var(--ink-2); max-width: 46ch; }
+  .cta { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; }
+  .btn { font: 500 .88rem/1 var(--sans); text-decoration: none; border: 1px solid var(--ink); border-radius: 999px; padding: 11px 16px; display: inline-block; transition: background .2s, color .2s; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn--ink { background: var(--ink); color: var(--paper); }
+  .btn--ink:hover { background: var(--red); border-color: var(--red); }
+  .art-box { min-height: 250px; }
+  .eq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 24px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .key { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; font-size: .88rem; color: var(--ink-2); }
+  .key-l { text-align: left; }
+  .sym { font-size: 1.5rem; font-style: italic; color: var(--ink); line-height: 1; }
+  .toggles { grid-column: 1 / -1; display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .toggles button { font: 500 .72rem/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+  .toggles button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  .toggles button[aria-pressed='true']::before { content: '✓ '; }
+  .eq-cap { grid-column: 1 / -1; margin: 10px 0 0; }
+  .eq-cap output { margin-left: 6px; color: var(--ink-2); }
+  .index { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); }
+  .index a { display: grid; gap: 4px; padding: 12px 18px 4px 0; text-decoration: none; height: 100%; }
+  .index li + li a { padding-left: 18px; border-left: 1px solid var(--line); }
+  .index a:hover { color: inherit; }
+  .index a:hover .n, .index a:hover .eyebrow { color: var(--red); }
+  .n { color: var(--ink-3); }
+  .t { color: var(--ink-2); font-size: .88rem; line-height: 1.42; }
+
+  /* ---------- capítulos ---------- */
+  .chapter { min-height: 125svh; display: flex; align-items: center; padding: 0 var(--gutter); }
+  .card { max-width: 40ch; margin-left: clamp(0px, 4vw, 80px); }
+  .card h2 { font-size: var(--step-3); line-height: 1.04; font-weight: 400; margin: 10px 0 16px; letter-spacing: -0.01em; }
+  .card p:last-of-type { color: var(--ink-2); }
+  .num { color: var(--red); }
+  :global(html.js) .card > * { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  :global(html.js) .chapter.is-active .card > * { opacity: 1; transform: none; }
+  :global(html.js) .chapter.is-active .card > :nth-child(2) { transition-delay: .12s; }
+  :global(html.js) .chapter.is-active .card > :nth-child(3) { transition-delay: .3s; }
+
+  /* ---------- seções ---------- */
+  .sec { max-width: var(--max); margin: 0 auto; padding: 16vh var(--gutter) 6vh; position: relative; background: var(--paper); }
+  .sec-head { max-width: 62ch; margin-bottom: 40px; }
+  .sec-head h2 { font-size: var(--step-3); line-height: 1.04; font-weight: 400; letter-spacing: -0.01em; margin: 10px 0 14px; }
+  .sec-sub { color: var(--ink-2); margin: 0; }
+
+  .grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--ink); }
+  .cell { border-bottom: 1px solid var(--line); }
+  .cell:nth-child(odd) { border-right: 1px solid var(--line); }
+  .card-link { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; padding: 28px 24px 28px 0; text-decoration: none; height: 100%; align-items: center; }
+  .cell:nth-child(even) .card-link { padding-left: 24px; padding-right: 0; }
+  .card-link:hover { color: inherit; }
+  .cell-art { display: block; background: var(--paper-2); padding: 12px; transition: background .4s; }
+  .card-link:hover .cell-art, .card-link:focus-visible .cell-art { background: #e6e0d7; }
+  .cell-meta { display: grid; gap: 8px; }
+  .cell-n { color: var(--ink-3); }
+  .cell-t { font-size: var(--step-2); line-height: 1.05; }
+  .cell-d { color: var(--ink-2); font-size: .95rem; }
+  .cell-ev { font-size: .85rem; color: var(--ink-2); }
+  .cell-ev .tag { margin-left: 4px; }
+  .cell-go { font: 500 .78rem/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; transition: color .2s, transform .3s var(--ease); }
+  .card-link:hover .cell-go, .card-link:focus-visible .cell-go { color: var(--red); transform: translateX(4px); }
+  .card-link:hover .cell-t { color: var(--red); }
+
+  /* ---------- trajetória ---------- */
+  .ruler { position: relative; height: 42px; margin: 0 0 8px; border-bottom: 1px solid var(--ink); }
+  .tick { position: absolute; top: 0; transform: translateX(-50%); font-size: .7rem; color: var(--ink-3); }
+  .tick::after { content: ''; position: absolute; left: 50%; top: 18px; height: 24px; border-left: 1px solid var(--line); }
+  .span { position: absolute; bottom: 4px; height: 8px; background: var(--stone); }
+  .span-visagio { background: var(--red); }
+  .stops { list-style: none; margin: 0; padding: 0; }
+  .stop { border-bottom: 1px solid var(--line); }
+  .stop-h { margin: 0; font: inherit; }
+  .stop-h button { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 12em minmax(0, 1fr) minmax(0, 1.3fr) 24px; gap: 16px; align-items: baseline; padding: 18px 0; }
+  .stop-h button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .stop-p { font-size: .78rem; color: var(--ink-3); }
+  .stop-o { font-size: var(--step-2); line-height: 1.05; }
+  .stop-r { color: var(--ink-2); font-size: .95rem; }
+  .stop-x { width: 14px; height: 14px; position: relative; justify-self: end; }
+  .stop-x::before, .stop-x::after { content: ''; position: absolute; inset: 6px 0 auto 0; height: 1.5px; background: var(--ink); transition: transform .3s var(--ease); }
+  .stop-x::after { transform: rotate(90deg); }
+  .stop-h button[aria-expanded='true'] .stop-x::after { transform: rotate(0); }
+  .stop-h button:hover .stop-o { color: var(--red); }
+  .stop-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .5s var(--ease); padding: 0 0 24px calc(12em + 16px); }
+  :global(html.js) .stop-body[data-closed] { grid-template-rows: 0fr; padding-bottom: 0; }
+  .stop-body > * { min-height: 0; }
+  :global(html.js) .stop-body { overflow: hidden; }
+  .stop-s { font-family: var(--serif); font-size: var(--step-1); line-height: 1.3; margin: 0 0 16px; max-width: 50ch; }
+  .front { margin: 0 0 24px; max-width: 72ch; }
+  .front h4 { font-size: 1rem; margin: 0 0 4px; font-weight: 600; }
+  .front h4 .mono { font-weight: 400; color: var(--ink-3); }
+  .client { margin: 0 0 8px; color: var(--ink-3); font-size: .88rem; }
+  .front ul { margin: 0; padding: 0; list-style: none; }
+  .front li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 6px 0; border-top: 1px dotted var(--line); color: var(--ink-2); font-size: .95rem; }
+  .it-n { font-size: 1.2rem; color: var(--ink); }
+  .tags { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+  .muted { color: var(--ink-3); font-size: .88rem; margin: 8px 0 0; }
+  .front-links { font-size: .88rem; margin: 8px 0 0; }
+  .front-links a { margin-left: 8px; color: var(--red); }
+  .extra { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap: 32px; margin-top: 48px; }
+  .extra ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  .extra li { padding: 8px 0; border-top: 1px solid var(--line); font-size: .92rem; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+  .extra li .mono { color: var(--ink-3); }
+  .stack { color: var(--ink-2); font-size: .92rem; margin-top: 8px; }
+
+  /* ---------- sobre / contato ---------- */
+  .sobre-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; max-width: 1000px; }
+  .sobre-cols p { margin: 0; color: var(--ink-2); }
+  .how { grid-column: 1 / -1; list-style: none; padding: 0; margin: 12px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); }
+  .how li { padding: 14px 16px 0 0; font-size: .92rem; color: var(--ink-2); }
+  .how strong { display: block; color: var(--ink); margin-bottom: 4px; }
+  .contato { padding-bottom: 12vh; }
+  .contato h2 { font-size: var(--step-3); line-height: 1.04; font-weight: 400; max-width: 22ch; margin: 10px 0 28px; }
+  .contact-links { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .big-link { font-size: var(--step-2); color: var(--red); overflow-wrap: anywhere; }
+  .foot { margin-top: 12vh; color: var(--ink-3); font-size: .72rem; }
+
+  /* ---------- painel ---------- */
+  .sheet { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow-y: auto; overscroll-behavior: contain; z-index: 60; }
+  .sheet:not([open]) { display: none; }
+  .sheet::backdrop { background: var(--paper); }
+  .sheet-bar { position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px var(--gutter); background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); font-size: var(--step--1); }
+  .sheet-bar a { text-decoration: none; }
+  .sheet-x { border: 1px solid var(--ink); border-radius: 999px; padding: 7px 12px; }
+  .sheet-x:hover { background: var(--ink); color: var(--paper); }
+  .sheet-count { color: var(--ink-3); }
+  :global(html.sheet-open) { overflow: hidden; }
+  .sheet[open].is-entering { animation: sheet-in .45s var(--ease); }
+  @keyframes sheet-in { from { opacity: 0; transform: translateY(24px); } }
+  :global(::view-transition-group(entrega-art)) { animation-duration: .5s; animation-timing-function: cubic-bezier(.2, .7, .1, 1); }
+
+  @media (max-width: 899px) {
+    .grid { grid-template-columns: 1fr; }
+    .cell:nth-child(odd) { border-right: 0; }
+    .card-link, .cell:nth-child(even) .card-link { grid-template-columns: 1fr; padding: 24px 0; }
+    .stop-h button { grid-template-columns: 1fr 24px; gap: 4px 12px; }
+    .stop-p, .stop-o, .stop-r { grid-column: 1; }
+    .stop-x { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
+    .stop-body { padding-left: 0; }
+    .extra { grid-template-columns: 1fr; }
+    .sobre-cols { grid-template-columns: 1fr; }
+    .how { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 759px) {
+    .mast-nav { display: none; }
+    .who { flex-direction: column; gap: 2px; }
+    .lead { grid-template-columns: 1fr; row-gap: 10px; }
+    .lead h1 { font-size: 2.35rem; }
+    .prop { font-size: .95rem; }
+    .cta { margin-top: 10px; }
+    .hero { grid-template-rows: auto auto minmax(230px, 34svh) auto auto; min-height: auto; }
+    .art-box { min-height: 230px; }
+    .eq { grid-template-columns: 1fr; row-gap: 6px; }
+    .index { grid-template-columns: 1fr 1fr; }
+    .index li:nth-child(3) a { padding-left: 0; border-left: 0; }
+    .index li:nth-child(n + 3) a { border-top: 1px solid var(--line); }
+    .chapter { align-items: flex-start; padding-top: 32svh; min-height: 115svh; }
+    .ideia-anchor + .chapter { margin-top: 50svh; }
+    .card { background: var(--paper); padding: 16px var(--gutter) 20px; margin: 0 calc(-1 * var(--gutter)); max-width: none; border-top: 1px solid var(--line); }
+    .card h2 { font-size: var(--step-2); }
+    .rail { display: none; }
+    .topbar nav { gap: 12px; }
+    .tb-name { display: none; }
+  }
+</style>
+
+<script>
+  import { DotField, labelLayer } from '../lib/dots';
+  import { scenesA, leverState, geo, heroBox } from '../lib/scenes-a';
+  import { initSheet } from '../lib/sheet';
+
+  /* ---------------- escultura ---------------- */
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-art]')!;
+  const story = document.querySelector<HTMLElement>('[data-story]')!;
+  const box = document.querySelector<HTMLElement>('[data-art-box]')!;
+  const measure = () => {
+    const c = canvas.getBoundingClientRect(), b = box.getBoundingClientRect();
+    // o palco é fixo (sticky) e a abertura rola por cima: medimos a caixa em relação ao topo do documento
+    const top = b.top + scrollY - (story.getBoundingClientRect().top + scrollY);
+    const w = b.width, h = b.height;
+    const s = Math.min(w / 700, h / 345);
+    heroBox.box = { cx: b.left - c.left + w / 2, cy: top + h / 2 + 22 * s, s };
+  };
+  measure();
+  const field = new DotField(canvas, scenesA, { onLabels: labelLayer(document.querySelector('[data-labels]')!) });
+  field.setStill(document.documentElement.classList.contains('still'));
+  addEventListener('motionchange', (e) => field.setStill((e as CustomEvent).detail));
+  new ResizeObserver(() => { measure(); field.rebuild(); }).observe(box);
+
+  /* L = camadas de repertório → posição do apoio */
+  const readout = document.querySelector<HTMLOutputElement>('[data-readout]')!;
+  const layers = [true, true, true];
+  const F = [0.08, 0.38, 0.66, 0.94];
+  const applyLayers = () => {
+    const n = layers.filter(Boolean).length;
+    leverState.f = F[n];
+    readout.textContent = n === 0 ? 'Sem repertório: o apoio fica longe e o efeito é pequeno.' : n === 3 ? 'Negócio, técnica e IA: o mesmo esforço move o maior efeito.' : `${n} de 3 camadas: o apoio se aproxima do efeito.`;
+    field.rebuild(0);
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((b) => b.addEventListener('click', () => {
+    const k = +b.dataset.layer!; layers[k] = !layers[k]; b.setAttribute('aria-pressed', String(layers[k])); applyLayers();
+  }));
+  readout.textContent = '';
+
+  /* arrastar o apoio no desenho (complementa os botões) */
+  let dragging = false, progress = 0;
+  const fFromX = (x: number) => { const { cx, s } = geo(canvas.clientWidth, canvas.clientHeight, false); const L = 620 * s; return ((x - (cx - L / 2)) / L - 0.34) / 0.5; };
+  const near = (y: number) => { const { cy, s } = geo(canvas.clientWidth, canvas.clientHeight, false); return y > cy - 120 * s && y < cy + 130 * s; };
+  const setF = (f: number) => { leverState.f = Math.max(0, Math.min(1, f)); field.rebuild(0); };
+  canvas.addEventListener('pointerdown', (e) => {
+    if (progress > 0.3) return;
+    const r = canvas.getBoundingClientRect();
+    if (!near(e.clientY - r.top)) return;
+    dragging = true; canvas.setPointerCapture(e.pointerId); setF(fFromX(e.clientX - r.left));
+  });
+  canvas.addEventListener('pointermove', (e) => { if (dragging) setF(fFromX(e.clientX - canvas.getBoundingClientRect().left)); });
+  canvas.addEventListener('pointerup', () => (dragging = false));
+  canvas.addEventListener('pointercancel', () => (dragging = false));
+
+  /* rolagem → cena, com patamares */
+  const blocks = [...document.querySelectorAll<HTMLElement>('[data-block]')];
+  const rails = [...document.querySelectorAll<HTMLAnchorElement>('[data-rail]')];
+  const artText = [...document.querySelectorAll('.chapter .visually-hidden')].map((p) => p.textContent!.replace('Ilustração: ', ''));
+  const art0 = canvas.getAttribute('aria-label')!;
+  const topbar = document.querySelector<HTMLElement>('[data-topbar]')!;
+  const smooth = (a: number, b: number, x: number) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  let current = -1;
+  const update = () => {
+    const vh = innerHeight, mobile = innerWidth < 760;
+    let p = 0;
+    for (let i = 1; i < blocks.length; i++) {
+      const top = blocks[i].getBoundingClientRect().top;
+      p += mobile ? smooth(vh * 0.6, vh * 0.2, top) : smooth(vh * 0.85, vh * 0.3, top);
+    }
+    progress = p; field.setProgress(p);
+    story.classList.toggle('in-chapters', p > 0.5);
+    topbar.classList.toggle('is-on', blocks[0].getBoundingClientRect().bottom < 0);
+    const idx = Math.round(p);
+    if (idx !== current) {
+      current = idx;
+      rails.forEach((a, i) => (i === idx ? a.setAttribute('aria-current', 'step') : a.removeAttribute('aria-current')));
+      canvas.setAttribute('aria-label', idx === 0 ? art0 : artText[idx - 1]);
+      blocks.forEach((b, i) => b.classList.toggle('is-active', i === idx));
+    }
+  };
+  let ticking = false;
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); } }, { passive: true });
+  addEventListener('resize', update);
+  update();
+
+  /* ---------------- trajetória: abrir/fechar no lugar ---------------- */
+  document.querySelectorAll<HTMLButtonElement>('[data-stop]').forEach((b) => {
+    const body = document.getElementById(b.getAttribute('aria-controls')!)!;
+    const sync = () => { const open = b.getAttribute('aria-expanded') === 'true'; open ? body.removeAttribute('data-closed') : body.setAttribute('data-closed', ''); body.toggleAttribute('inert', !open); };
+    sync();
+    b.addEventListener('click', () => { b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true')); sync(); });
+  });
+
+  /* ---------------- painel das entregas ---------------- */
+  initSheet({ onOpen: () => field.setActive(false), onClose: () => field.setActive(true) });
+</script>

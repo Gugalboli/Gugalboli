@@ -1,0 +1,92 @@
+{
+  "passagens": [
+    {
+      "id": "visagio", "org": "Visagio", "periodo": "fev/2025 – hoje", "inicio": 2025.1, "fim": null,
+      "papel": "Business Consultant",
+      "resumo": "Consultoria de gestão: estratégia, operações e IA aplicada, em clientes anonimizados.",
+      "frentes": [
+        {
+          "titulo": "Núcleo de IA aplicada à cobrança", "periodo": "abr/2026 – hoje", "papel": "PO e PMO",
+          "cliente": "grupo de educação superior",
+          "itens": [
+            { "t": "Backlog priorizado por impacto e esforço; condução das frentes do núcleo." },
+            { "t": "Análise de atribuição das POCs mostrou maior contribuição do disparo do que da interação com IA — com testes A/B e medição contínua — e mudou a pergunta estratégica." },
+            { "t": "Avaliação e renegociação de fornecedores; dois cenários de internalização." },
+            { "t": "Operação de assessorias de cobrança.", "num": "~R$ 33 mi/ano", "natureza": ["escopo", "dimensão da operação, não economia"] },
+            { "t": "Economia com a internalização.", "num": "R$ 1 mi/ano", "natureza": ["realizado", "anualizado", "coletivo"] },
+            { "t": "Arrecadação incremental nos canais digitais.", "num": "R$ 9 mi/ano", "natureza": ["realizado", "anualizado", "coletivo"] }
+          ],
+          "aviso": "Economia e arrecadação medem coisas diferentes e não se somam.",
+          "entregas": ["base-viva", "speech-analytics"]
+        },
+        {
+          "titulo": "Redesenho jurídico com IA", "cliente": "cadeia jurídica de uma grande organização",
+          "itens": [
+            { "t": "Mapeamento integral da cadeia e fluxos visuais apoiados pelo tradutor de transcrições." },
+            { "t": "Desenho de uma célula de apuração de subsídios por tema." },
+            { "t": "Oportunidades identificadas e priorizadas.", "num": "40+ / 20", "natureza": ["escopo", "coletivo"] },
+            { "t": "Ganho financeiro com desbloqueios judiciais e estornos de seguro garantia efetivados.", "num": "+R$ 1,7 mi/ano", "natureza": ["realizado", "coletivo"] }
+          ],
+          "entregas": ["tradutor-mermaid"]
+        },
+        {
+          "titulo": "Estratégia de atendimento em mídias sociais", "cliente": "grupo de educação superior",
+          "itens": [
+            { "t": "Assessment e workshop com 5 áreas: 25+ dores, 35+ planos de ação, 6 frentes.", "natureza": ["escopo"] },
+            { "t": "Modelo operacional (equipe, processos, ferramenta, governança) e troca de software implementados.", "natureza": ["implementado"] },
+            { "t": "Sentimento negativo de 62% para 30% e CSAT de 3,8 para 4,5 em 12 meses.", "num": "metas", "natureza": ["meta", "não é resultado"] }
+          ],
+          "entregas": ["motor-comentarios"]
+        },
+        {
+          "titulo": "Estratégia comercial em software",
+          "itens": [ { "t": "Entrada em consultoria. Detalhes confidenciais." } ]
+        }
+      ]
+    },
+    {
+      "id": "herbarium", "org": "Herbarium", "periodo": "nov/2024 – jan/2025", "inicio": 2024.85, "fim": 2025.05,
+      "papel": "Inteligência de mercado",
+      "resumo": "Passagem curta, concentrada em onboarding. Sem impacto consolidado para mostrar — e prefiro dizer isso a enfeitar.",
+      "frentes": []
+    },
+    {
+      "id": "haleon", "org": "Haleon (ex-GSK)", "periodo": "mar/2022 – fev/2024", "inicio": 2022.2, "fim": 2024.1,
+      "papel": "Salesforce Effectiveness Intern → BI & Systems Analyst LATAM",
+      "resumo": "Onde aprendi a ter rigor com o que reportava para quem decidia.",
+      "frentes": [
+        {
+          "titulo": "Base analítica da força de vendas",
+          "itens": [
+            { "t": "Automação de relatórios em VBA.", "natureza": ["qualitativo", "sem horas medidas"] },
+            { "t": "Indicadores comerciais a partir do SAP e controle da remuneração variável da força de campo." }
+          ]
+        },
+        {
+          "titulo": "Veeva CRM (Salesforce) e migração para Lightning",
+          "itens": [
+            { "t": "CRM para representantes de campo em todos os estados do Brasil.", "num": "200+", "natureza": ["escopo", "alcance da operação"] },
+            { "t": "Articulação entre estratégia global e operação local; migração Classic → Lightning e treinamento." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ayra", "org": "Ayra Consultoria", "periodo": "ago/2021 – jan/2022", "inicio": 2021.6, "fim": 2022.05,
+      "papel": "Consultor — empresa júnior da UFRJ",
+      "resumo": "Primeira consultoria: relacionamento com clientes e organização de entregas.",
+      "frentes": []
+    }
+  ],
+  "formacao": [
+    { "t": "Administração — UFRJ", "periodo": "2020 – 2024" },
+    { "t": "Claude Certified Architect – Foundations (Anthropic)", "periodo": "out/2026" },
+    { "t": "Bootcamp de IA Generativa — VAI Academy/Visagio; projeto text-to-SQL", "periodo": "jan/2025", "nota": "iniciativa formativa" },
+    { "t": "UX Design — Interaction Design Foundation", "periodo": "dez/2025", "nota": "repertório complementar" }
+  ],
+  "pessoais": [
+    { "t": "Text-to-SQL no bootcamp", "d": "Projeto do bootcamp de IA generativa: perguntas em linguagem natural viram consultas SQL." },
+    { "t": "Vault de conhecimento para agentes de IA", "d": "Meu próprio \"second brain\" evoluiu para ser lido por agentes — é dele que sai o conteúdo deste site. Um exemplo vivo da tese." }
+  ],
+  "stack": ["SQL", "Databricks", "Python", "Power BI", "Salesforce", "SAP", "Excel", "LLMs", "RAG", "Prompt e context engineering", "Agentes"]
+}

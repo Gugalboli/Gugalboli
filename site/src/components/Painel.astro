@@ -1,0 +1,180 @@
+---
+/** Conteúdo de uma entrega: síntese no topo → narrativa com palco persistente → fechamento com números qualificados. */
+import Art from './Art.astro';
+import MermaidStage from './MermaidStage.astro';
+interface N { valor: string; descricao: string; natureza: string[] }
+interface Props { e: any; idx: number; total: number; prev: any; next: any; base: string }
+const { e, idx, prev, next, base } = Astro.props;
+const f = e.fechamento;
+const isMermaid = e.slug === 'tradutor-mermaid';
+---
+<header class="p-head">
+  <p class="eyebrow"><span class="num">0{idx + 1}</span> Entrega em uso · {e.apelido}</p>
+  <h2 class="serif p-title" id={`t-${e.slug}`}>{e.titulo}</h2>
+  <p class="p-line">{e.linha}</p>
+  <dl class="synth">
+    <div><dt class="eyebrow">Contexto</dt><dd>{e.sintese.contexto}</dd></div>
+    <div><dt class="eyebrow">Minha contribuição</dt><dd>{e.sintese.contribuicao}</dd></div>
+    <div><dt class="eyebrow">Evidência principal</dt><dd>{e.sintese.evidencia} <span class="tags">{e.sintese.evidencia_tags.map((t: string) => <span class="tag">{t}</span>)}</span></dd></div>
+  </dl>
+</header>
+
+<section class="p-story" data-story-panel aria-label="Como funciona">
+  <div class="p-stage-col">
+    <div class="p-stage" data-stage-wrap>
+      {isMermaid ? <MermaidStage /> : (
+        <figure class="p-art" data-step="-1" data-art-steps>
+          <div class="p-art-shared" data-vt-art><Art slug={e.slug} /></div>
+          <figcaption class="illus">Ilustração esquemática — o palco animado desta entrega chega na próxima fase.</figcaption>
+        </figure>
+      )}
+    </div>
+  </div>
+  <ol class="p-steps">
+    {e.passos.map((s: any, i: number) => (
+      <li class="p-step" data-pstep={i}>
+        <div class="p-step-in">
+          <p class="eyebrow"><span class="num">0{i + 1}</span> {s.rotulo}</p>
+          <h3 class="serif">{s.titulo}</h3>
+          <p>{s.texto}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<section class="p-close" aria-labelledby={`f-${e.slug}`}>
+  <p class="eyebrow">Fechamento</p>
+  <h3 class="serif" id={`f-${e.slug}`}>{f.titulo}</h3>
+
+  {f.numeros?.length > 0 && (
+    <ul class="nums">
+      {f.numeros.map((n: N) => (
+        <li><span class="n-v serif">{n.valor}</span><span class="n-d">{n.descricao}</span><span class="tags">{n.natureza.map((t, k) => <span class={`tag ${k === 0 ? 'tag--red' : ''}`}>{t}</span>)}</span></li>
+      ))}
+    </ul>
+  )}
+
+  {f.lacuna && <p class="gap"><span class="eyebrow">Lacuna declarada</span> {f.lacuna}</p>}
+
+  {f.grafico && (
+    <figure class="bars">
+      <div class="bar-row"><span>Planejado</span><span class="track"><span class="bar plan" style={`--v:${f.grafico.planejado / 4}`}></span></span><span class="mono">{f.grafico.planejado} {f.grafico.unidade}</span></div>
+      <div class="bar-row"><span>Realizado</span><span class="track"><span class="bar real" style={`--v:${f.grafico.realizado / 4}`}></span><span class="gapbar" style={`--v:${f.grafico.realizado / 4}`}><span class="mono">−50%</span></span></span><span class="mono">{f.grafico.realizado} {f.grafico.unidade}</span></div>
+      <div class="axis mono" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4 meses</span></div>
+      <figcaption>
+        <p>{f.grafico.legenda}</p>
+        <p class="tags">{f.grafico.natureza.map((t: string, k: number) => <span class={`tag ${k === 0 ? 'tag--red' : ''}`}>{t}</span>)}</p>
+        <p class="muted">{f.grafico.limite}</p>
+      </figcaption>
+    </figure>
+  )}
+
+  {f.coletivos && (
+    <div class="coll">
+      <p class="coll-leg"><span class="eyebrow">Resultados coletivos do projeto</span> {f.coletivos.legenda}</p>
+      <ul class="nums nums--two">
+        {f.coletivos.itens.map((n: N) => (
+          <li><span class="n-v serif">{n.valor}</span><span class="n-d">{n.descricao}</span><span class="tags">{n.natureza.map((t, k) => <span class={`tag ${k === 0 ? 'tag--red' : ''}`}>{t}</span>)}</span></li>
+        ))}
+      </ul>
+      <p class="muted">{f.coletivos.aviso}</p>
+    </div>
+  )}
+
+  {f.contexto && (
+    <aside class="ctx"><p class="eyebrow">Contexto do projeto</p><p>{f.contexto.texto}</p><p class="tags">{f.contexto.natureza.map((t: string) => <span class="tag">{t}</span>)}</p></aside>
+  )}
+
+  {f.notas?.length > 0 && <ul class="notes">{f.notas.map((t: string) => <li>{t}</li>)}</ul>}
+
+  <nav class="p-nav" aria-label="Outras entregas">
+    <a href={`${base}/entregas/${prev.slug}/`} data-goto={prev.slug}>← {prev.titulo}</a>
+    <a href={`${base}/entregas/${next.slug}/`} data-goto={next.slug}>{next.titulo} →</a>
+  </nav>
+</section>
+
+<style>
+  .p-head { max-width: var(--max); margin: 0 auto; padding: 8px var(--gutter) 24px; }
+  .p-title { font-size: var(--step-4); line-height: .98; letter-spacing: -0.02em; font-weight: 400; margin: 10px 0 14px; max-width: 16ch; }
+  .p-line { font-size: var(--step-1); line-height: 1.35; color: var(--ink-2); max-width: 52ch; margin: 0; }
+  .num { color: var(--red); }
+  .synth { display: grid; grid-template-columns: repeat(3, 1fr); margin: 28px 0 0; border-top: 1px solid var(--ink); }
+  .synth div { padding: 14px 20px 0 0; }
+  .synth div + div { padding-left: 20px; border-left: 1px solid var(--line); }
+  .synth dd { margin: 6px 0 0; font-size: .95rem; color: var(--ink-2); }
+  .tags { display: inline-flex; gap: 6px; flex-wrap: wrap; vertical-align: middle; }
+
+  .p-story { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); column-gap: 56px; }
+  .p-stage-col { grid-column: 2; grid-row: 1; }
+  .p-stage { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; justify-content: center; padding: 56px 0 16px; }
+  .p-steps { grid-column: 1; grid-row: 1; list-style: none; margin: 0; padding: 0; }
+  .p-step { min-height: 90svh; display: flex; flex-direction: column; justify-content: center; max-width: 40ch; }
+  .p-step h3 { font-size: var(--step-2); line-height: 1.08; font-weight: 400; margin: 8px 0 14px; }
+  .p-step-in > * { transition: color .5s var(--ease); }
+  :global(html.js) .p-step:not(.is-active) .p-step-in > * { color: var(--ink-3); }
+  .p-step-in p:last-child { color: var(--ink-2); }
+
+  .p-art { margin: 0; width: min(100%, 560px); }
+  .p-art-shared { width: 100%; }
+  .p-art figcaption { margin-top: 12px; text-align: center; }
+  .p-art :global(.mv) { transition: opacity .6s var(--ease), transform .7s var(--ease); }
+  :global(html.js) .p-art[data-step='-1'] :global(:is(.mv-a, .mv-b, .mv-r)),
+  :global(html.js) .p-art[data-step='0'] :global(:is(.mv-a, .mv-b, .mv-r)) { opacity: .12; }
+  :global(html.js) .p-art[data-step='1'] :global(:is(.mv-b, .mv-r)) { opacity: .12; }
+  :global(html.js) .p-art[data-step='2'] :global(.mv-r) { opacity: .12; }
+
+  .p-close { max-width: 980px; margin: 0 auto; padding: 14vh var(--gutter) 12vh; }
+  .p-close > h3 { font-size: var(--step-3); line-height: 1.04; font-weight: 400; margin: 10px 0 32px; max-width: 20ch; }
+  .nums { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 0; border-top: 1px solid var(--ink); }
+  .nums li { display: grid; grid-template-columns: minmax(7ch, auto) 1fr; column-gap: 24px; row-gap: 6px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+  .n-v { font-size: var(--step-3); line-height: 1; }
+  .n-d { color: var(--ink-2); }
+  .nums .tags { grid-column: 2; }
+  .gap { border-left: 2px solid var(--red); padding: 4px 0 4px 16px; margin: 24px 0; max-width: 60ch; }
+  .gap .eyebrow { display: block; color: var(--red); margin-bottom: 4px; }
+  .coll { margin-top: 40px; padding: 20px; background: var(--paper-2); }
+  .coll-leg { margin: 0 0 12px; max-width: 64ch; }
+  .coll-leg .eyebrow { display: block; margin-bottom: 4px; }
+  .muted { color: var(--ink-3); font-size: .92rem; }
+  .ctx { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-2); max-width: 64ch; }
+  .ctx p { margin: 0 0 8px; }
+  .notes { margin: 24px 0 0; padding-left: 1.1em; color: var(--ink-2); max-width: 64ch; }
+  .notes li + li { margin-top: 6px; }
+  .p-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--ink); font-size: var(--step--1); flex-wrap: wrap; }
+
+  .bars { margin: 0 0 24px; }
+  .bar-row { display: grid; grid-template-columns: 7em 1fr 6em; align-items: center; gap: 16px; padding: 8px 0; }
+  .track { position: relative; height: 34px; }
+  .bar { position: absolute; inset: 0 auto 0 0; width: calc(var(--v) * 100%); }
+  .plan { background: var(--stone); } .real { background: var(--ink); }
+  .gapbar { position: absolute; top: 0; bottom: 0; left: calc(var(--v) * 100%); right: 0; border: 1px dashed var(--red); border-left: 2px solid var(--red); display: flex; align-items: center; justify-content: center; color: var(--red); font-size: .8rem; }
+  .bar-row .mono { text-align: right; font-size: .85rem; }
+  .axis { display: flex; justify-content: space-between; margin: 0 calc(6em + 16px) 0 calc(7em + 16px); color: var(--ink-3); font-size: .7rem; border-top: 1px solid var(--line); padding-top: 4px; }
+  .bars figcaption { margin-top: 18px; }
+  .bars figcaption p { margin: 0 0 8px; }
+
+  @media (max-width: 899px) {
+    .synth { grid-template-columns: 1fr; }
+    .synth div, .synth div + div { padding: 12px 0; border-left: 0; }
+    .synth div + div { border-top: 1px solid var(--line); }
+    .p-story { grid-template-columns: 1fr; }
+    .p-stage-col, .p-steps { grid-column: 1; grid-row: 1; }
+    .p-stage { height: 100svh; align-items: flex-start; padding-top: 60px; }
+    .p-stage :global(svg) { max-height: 52svh; }
+    .p-art { width: min(100%, 420px); }
+    .p-steps { position: relative; z-index: 1; }
+    /* texto do passo em "folha" presa à base da tela: não cobre o palco */
+    .p-step { min-height: 100svh; justify-content: flex-end; max-width: none; }
+    .p-step-in { position: sticky; bottom: 0; background: var(--paper); border-top: 1px solid var(--line); margin: 0 calc(-1 * var(--gutter)); padding: 14px var(--gutter) max(18px, env(safe-area-inset-bottom)); min-height: 38svh; }
+    .p-step-in > * { margin: 0; }
+    .p-step h3 { margin: 6px 0 8px; font-size: var(--step-1); }
+    .p-step-in p:last-child { font-size: .95rem; }
+    :global(html.js) .p-step .p-step-in { opacity: 0; transition: opacity .35s; }
+    :global(html.js) .p-step.is-active .p-step-in { opacity: 1; }
+    .nums li { grid-template-columns: 1fr; }
+    .nums .tags { grid-column: 1; }
+    .bar-row { grid-template-columns: 5.5em 1fr 4.5em; gap: 10px; }
+    .axis { margin: 0 calc(4.5em + 10px) 0 calc(5.5em + 10px); }
+  }
+</style>

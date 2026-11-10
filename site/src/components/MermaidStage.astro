@@ -1,0 +1,147 @@
+---
+/** Palco da entrega Tradutor de transcrições (ver src/lib/mermaid-stage.ts). */
+// Palco (viewBox 600 × 780). Posições finais (v2 consolidada); o script recua para a v1.
+const CH = 8.4; // largura de caractere do IBM Plex Mono a 14px
+const lines = [
+  { t: '— Quando chega o ofício, a gente', hl: [10, 24] },
+  { t: '  confere o processo no sistema.', hl: [2, 31] },
+  { t: '— Depois pede o subsídio pra área…', hl: [9, 33] },
+  { t: '— Se for bloqueio, vai pro financeiro.', hl: [2, 38] },
+  { t: '— No fim, a resposta ao juízo sai daqui.', hl: [10, 29] },
+];
+const LX = 40, LY0 = 96, LH = 30;
+const nodes = [
+  { id: 'n1', label: 'Ofício recebido', x: 40, y: 300, w: 250, src: 0 },
+  { id: 'n2', label: 'Confere processo no sistema', x: 40, y: 424, w: 250, src: 1, shift: true, opp: 1 },
+  { id: 'n3', label: 'Pede subsídio à área', x: 40, y: 486, w: 250, src: 2, shift: true, opp: 2 },
+  { id: 'n4', label: 'É bloqueio?', x: 40, y: 548, w: 250, src: 3, shift: true },
+  { id: 'n5', label: 'Financeiro executa', x: 330, y: 548, w: 200, src: 3, shift: true },
+  { id: 'n6', label: 'Resposta ao juízo', x: 40, y: 610, w: 250, src: 4, shift: true },
+];
+const NH = 40;
+const ins = { id: 'nT', label: 'Triagem por tema', x: 40, y: 362, w: 250 };
+const edgesMain = [
+  ['n2', 'n3'], ['n3', 'n4'], ['n4', 'n6'],
+];
+const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+const srcOf = (n: (typeof nodes)[number]) => {
+  const l = lines[n.src];
+  return { x0: LX + l.hl[0] * CH, x1: LX + l.hl[1] * CH, y: LY0 + n.src * LH + 6 };
+};
+---
+<svg viewBox="0 0 600 780" role="img" aria-labelledby="mm-title mm-desc" data-stage>
+            <title id="mm-title">Da transcrição ao fluxo consolidado</title>
+            <desc id="mm-desc">Ilustração sintética. No alto, cinco falas de uma entrevista. Abaixo, o fluxo gerado: ofício recebido, triagem por tema (inserida pela revisão da equipe), confere processo no sistema, pede subsídio à área, é bloqueio? — se sim, financeiro executa —, resposta ao juízo. Duas oportunidades marcadas e uma nota de ponderação da equipe.</desc>
+
+            <!-- transcrição -->
+            <g class="transcript">
+              <rect x="20" y="40" width="560" height="214" rx="4" class="card" />
+              <text x="40" y="68" class="meta">ENTREVISTA · ANALISTA</text>
+              <text x="560" y="68" class="meta" text-anchor="end">◇ ILUSTRAÇÃO SINTÉTICA</text>
+              {lines.map((l, i) => (
+                <g class="line" data-line={i}>
+                  <line class="hl" x1={LX + l.hl[0] * CH} x2={LX + l.hl[1] * CH} y1={LY0 + i * LH + 6} y2={LY0 + i * LH + 6} pathLength="1" />
+                  <text x={LX} y={LY0 + i * LH} class="speech" xml:space="preserve">{l.t}</text>
+                </g>
+              ))}
+            </g>
+
+            <text x="40" y="284" class="meta" data-v>FLUXO · <tspan data-vlabel>V2 CONSOLIDADA</tspan></text>
+
+            <!-- arestas -->
+            <g class="edges">
+              <line class="edge" data-edge="n1-nT" x1="165" x2="165" y1={300 + NH} y2="362" pathLength="1" />
+              <line class="edge" data-edge="nT-n2" x1="165" x2="165" y1={362 + NH} y2="424" pathLength="1" />
+              <line class="edge edge-v1" data-edge="n1-n2" x1="165" x2="165" y1={300 + NH} y2="362" pathLength="1" />
+              <g data-shift>
+                {edgesMain.map(([a, b]) => (
+                  <line class="edge" data-edge={`${a}-${b}`} x1="165" x2="165" y1={byId[a].y + NH} y2={byId[b].y} pathLength="1" />
+                ))}
+                <line class="edge" data-edge="n4-n5" x1="290" x2="330" y1={548 + NH / 2} y2={548 + NH / 2} pathLength="1" />
+                <text x="300" y={548 + NH / 2 - 6} class="meta tiny">SIM</text>
+                <text x="172" y={548 + NH + 15} class="meta tiny">NÃO</text>
+              </g>
+            </g>
+
+            <!-- nós -->
+            <g class="node" data-node="n1">
+              <rect class="dotted" x="40" y="300" width="250" height={NH} rx="3" />
+              <rect class="solid" x="40" y="300" width="250" height={NH} rx="3" />
+              <text x="54" y={300 + 25}>Ofício recebido</text>
+            </g>
+            <g class="node node-ins" data-node="nT">
+              <rect class="dotted red" x={ins.x} y={ins.y} width={ins.w} height={NH} rx="3" />
+              <rect class="solid red" x={ins.x} y={ins.y} width={ins.w} height={NH} rx="3" />
+              <text x="54" y={ins.y + 25}>{ins.label}</text>
+            </g>
+            <g data-shift>
+              {nodes.slice(1).map((n) => (
+                <g class="node" data-node={n.id}>
+                  <rect class="dotted" x={n.x} y={n.y} width={n.w} height={NH} rx="3" />
+                  <rect class="solid" x={n.x} y={n.y} width={n.w} height={NH} rx="3" />
+                  <text x={n.x + 14} y={n.y + 25}>{n.label}</text>
+                  {n.opp && <g class="opp" data-opp={n.opp}><circle cx={n.x + n.w + 18} cy={n.y + NH / 2} r="11" /><text x={n.x + n.w + 18} y={n.y + NH / 2 + 4.5} text-anchor="middle">{n.opp}</text></g>}
+                </g>
+              ))}
+            </g>
+
+            <!-- ponderação da equipe -->
+            <g class="note" data-note>
+              <path class="note-link" d="M330 352 C 312 352, 306 382, 290 382" pathLength="1" />
+              <rect x="330" y="300" width="250" height="96" rx="3" />
+              <text x="346" y="324" class="meta red">PONDERAÇÃO DA EQUIPE</text>
+              <text x="346" y="348">A triagem por tema vem</text>
+              <text x="346" y="368">antes da consulta ao sistema.</text>
+              <text x="346" y="388" class="meta" data-note-ok>✓ INCORPORADA NA V2</text>
+            </g>
+
+            <!-- oportunidades -->
+            <g class="opps" data-opps>
+              <text x="330" y="680" class="meta">OPORTUNIDADES CITADAS</text>
+              <circle cx="341" cy="701" r="9" class="mini" /><text x="341" y="705" class="mini-t" text-anchor="middle">1</text>
+              <text x="358" y="706">Consulta repetida ao sistema</text>
+              <circle cx="341" cy="727" r="9" class="mini" /><text x="341" y="731" class="mini-t" text-anchor="middle">2</text>
+              <text x="358" y="732">Subsídio pedido sem padrão</text>
+            </g>
+
+            <!-- saída -->
+            <g class="out" data-out>
+              <line class="edge" x1="165" x2="165" y1={610 + NH} y2="690" pathLength="1" />
+              <path d="M120 690 h74 l16 16 v58 h-90 z" class="doc" />
+              <path d="M194 690 v16 h16" class="doc-fold" />
+              <text x="134" y="728" class="meta">PARA O</text>
+              <text x="134" y="744" class="meta">CLIENTE</text>
+            </g>
+
+            <!-- pontos em trânsito (criados pelo script) -->
+            <g class="flying" data-fly aria-hidden="true"></g>
+          </svg>
+
+<style>
+  svg { width: 100%; height: 100%; max-height: 88svh; overflow: visible; }
+  /* --- SVG --- */
+  svg :global(text) { font-family: var(--sans); font-size: 15px; fill: var(--ink); }
+  .card { fill: #fffdf9; stroke: var(--line); }
+  .meta { font-family: var(--mono) !important; font-size: 11.5px !important; letter-spacing: .06em; fill: var(--ink-3) !important; }
+  .meta.red { fill: var(--red) !important; }
+  .tiny { font-size: 10px !important; }
+  .speech { font-family: var(--mono) !important; font-size: 14px !important; white-space: pre; }
+  .hl { stroke: var(--red-soft); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .edge { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .edge-v1 { opacity: 0; }
+  .node rect { fill: var(--paper); }
+  .node .dotted { stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 0.1 6; stroke-linecap: round; opacity: 0; }
+  .node .solid { stroke: var(--ink); stroke-width: 1.2; fill: #fffdf9; }
+  .node .red { stroke: var(--red); }
+  .node-ins .solid { fill: #fbf1ef; }
+  .opp circle { fill: var(--paper); stroke: var(--red); stroke-width: 1.4; }
+  .opp text { font-family: var(--mono); font-size: 12px; fill: var(--red); }
+  .mini { fill: var(--paper); stroke: var(--red); stroke-width: 1.2; }
+  .mini-t { font-family: var(--mono); font-size: 11px !important; fill: var(--red) !important; }
+  .note rect { fill: #fbf1ef; stroke: var(--red); stroke-width: 1.2; }
+  .note-link { fill: none; stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 1; }
+  .doc { fill: #fffdf9; stroke: var(--ink); stroke-width: 1.2; }
+  .doc-fold { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+  .flying :global(circle) { fill: var(--ink); }
+
+</style>

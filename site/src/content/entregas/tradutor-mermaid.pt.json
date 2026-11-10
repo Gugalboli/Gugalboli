@@ -1,0 +1,68 @@
+{
+  "slug": "tradutor-mermaid",
+  "titulo": "Tradutor de transcrições para fluxos",
+  "linha": "Entrevistas viram a primeira versão de fluxos de processo — e a revisão da equipe vira a versão final.",
+  "sintese": {
+    "contexto": "Diagnóstico de uma cadeia jurídica descentralizada numa grande organização: dezenas de processos, entrevistas extensas, entrega de fluxos visuais e oportunidades de redesenho.",
+    "contribuicao": "Criei o fluxo de tradução: script em Python, prompt detalhado e chamadas por API a modelos de linguagem. A revisão era da equipe.",
+    "evidencia": "Diagnóstico concluído em 2 meses, frente a 4 planejados.",
+    "evidencia_tags": [
+      "realizado",
+      "equipe"
+    ]
+  },
+  "passos": [
+    {
+      "id": "ouvir",
+      "rotulo": "Ouvir",
+      "titulo": "A entrevista é a matéria-prima.",
+      "texto": "Analistas e coordenadores descrevem como o trabalho acontece de verdade. A transcrição guarda tudo — inclusive o que ninguém desenharia num fluxo."
+    },
+    {
+      "id": "traduzir",
+      "rotulo": "Traduzir",
+      "titulo": "O script devolve uma primeira versão do fluxo.",
+      "texto": "Python envia a transcrição e um prompt detalhado à API do modelo. Voltam um fluxo em Mermaid e uma lista de oportunidades citadas na conversa — prontos para a reunião interna, sem esperar alguém desenhar."
+    },
+    {
+      "id": "revisar",
+      "rotulo": "Revisar",
+      "titulo": "A equipe pondera. Um caminho muda.",
+      "texto": "No alinhamento interno, quem estava na entrevista corrige o que o modelo entendeu errado. A revisão humana não é um anexo do processo: é onde o fluxo fica certo."
+    },
+    {
+      "id": "consolidar",
+      "rotulo": "Consolidar",
+      "titulo": "As ponderações voltam ao modelo.",
+      "texto": "As correções são devolvidas ao próprio modelo, que gera a versão consolidada para o cliente. Duas etapas em vez de cinco: entrevista com primeira versão; alinhamento com correções incorporadas."
+    }
+  ],
+  "fechamento": {
+    "titulo": "O diagnóstico terminou na metade do prazo previsto.",
+    "grafico": {
+      "planejado": 4,
+      "realizado": 2,
+      "unidade": "meses",
+      "legenda": "Diagnóstico completo: 2 meses frente a 4 planejados — 50% abaixo do prazo previsto.",
+      "natureza": [
+        "realizado",
+        "comparação com o planejamento",
+        "trabalho da equipe apoiado pelo tradutor"
+      ],
+      "limite": "Não houve medição de horas individuais nem comparação controlada."
+    },
+    "numeros": [],
+    "contexto": {
+      "texto": "O projeto de redesenho jurídico teve +R$ 1,7 mi/ano de ganho financeiro realizado (40+ oportunidades, 20 priorizadas; desbloqueios judiciais e estornos de seguro garantia efetivados).",
+      "natureza": [
+        "realizado",
+        "resultado do projeto, não da ferramenta",
+        "coletivo"
+      ]
+    },
+    "notas": []
+  },
+  "ordem": 4,
+  "apelido": "Python + API de LLM + Mermaid",
+  "card": "Entrevistas viram a primeira versão do fluxo; a revisão da equipe vira a versão final."
+}

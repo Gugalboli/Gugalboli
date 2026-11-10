@@ -11,8 +11,12 @@ const tri = (ax: number, ay: number, bx: number, by: number, cx: number, cy: num
 interface Geo { cx: number; cy: number; s: number; mobile: boolean }
 
 /** enquadramento: na abertura a arte fica no centro; nos capítulos, à direita (desktop) ou no alto (celular) */
+/** caixa da arte na abertura, medida no DOM pela página (cx, cy, escala) */
+export const heroBox: { box: { cx: number; cy: number; s: number } | null } = { box: null };
+
 export function geo(w: number, h: number, chapter: boolean): Geo {
   const mobile = w < 760;
+  if (!chapter && heroBox.box) return { ...heroBox.box, mobile };
   if (mobile) {
     const s = Math.min(w / 700, h / 900);
     return { cx: w / 2, cy: chapter ? h * 0.3 : h * 0.41, s, mobile };

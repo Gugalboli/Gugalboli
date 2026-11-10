@@ -135,6 +135,9 @@ export class DotField {
     this.kick();
   }
 
+  /** pausa o loop (ex.: painel de entrega aberto por cima) */
+  setActive(v: boolean) { this.visible = v; if (v) this.kick(); }
+
   setStill(v: boolean) { this.still = v || prefersReduced(); this.kick(); }
 
   /** Alvo interpolado do ponto i para o progresso atual. */

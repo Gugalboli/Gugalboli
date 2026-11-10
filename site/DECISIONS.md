@@ -1,6 +1,6 @@
 # Decisões de design — portfólio Gustavo Albuquerque
 
-Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado: **Fase 1 (estudos de direção), aguardando avaliação do Gustavo.**
+Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado: **Fase 2 (esqueleto navegável), aguardando avaliação do Gustavo.** Fase 1 aprovada como mistura A+B, sem foto.
 
 ## Fase 0 — suposições declaradas (sem bloqueio)
 
@@ -43,3 +43,22 @@ Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado:
 - Celular, cena de entrega: o texto do passo ainda passa por cima da metade inferior do palco durante a rolagem; proposta: texto do passo em "folha" fixa na base da tela.
 - Versão sem JavaScript da arte da abertura (SVG estático equivalente).
 - Grão discreto na arte: ainda não aplicado.
+
+## Fase 2 — esqueleto navegável
+
+- **D-17 Abertura = mecanismo do A + hierarquia editorial do B (decisão do Gustavo).** Do B: faixa de identidade (nome · atuação · cidade) com fio preto, definição grande em serifa com a proposta de valor e os CTAs ao lado, índice numerado 01–04 das sínteses na base. Do A: a alavanca de pontos no centro e a mesma escultura persistindo pelos capítulos.
+- **D-18 L passa a ser o repertório, não um controle abstrato.** O controle deslizante do A foi trocado pelos três botões do B (Negócio, Técnica, IA): cada camada ativa aproxima o apoio do efeito e a esfera cresce, sem a figura mudar. Arrastar o apoio no desenho continua funcionando. A legenda t / L / U fica em HTML, em três colunas sob a arte.
+- **D-19 A arte se posiciona pela caixa do layout.** A página mede a área reservada (`[data-art-box]`) e passa centro e escala para a cena, para a alavanca nunca colidir com o texto, de 320 a 1440 px.
+- **D-20 Entregas abrem no lugar, num `<dialog>` modal de tela cheia.** Cada cartão é um link real para `/entregas/<slug>/` (página estática gerada para cada entrega, que já vem com o painel aberto — compartilhável e legível sem JS). Com JS: `pushState`, transição compartilhada da ilustração (View Transitions API quando houver; senão, fade curto; nada com movimento reduzido), página de trás parada. Fechar (botão, Esc, Voltar) restaura a rolagem exata e devolve o foco ao cartão. Trocar de entrega dentro do painel usa `replaceState`, para o Voltar não virar um carrossel. *Atende "navegação contínua" e "botão Voltar previsível".*
+- **D-21 Painel: síntese → palco → fechamento.** Topo com contexto, contribuição e evidência principal (com selos). Meio com palco persistente e passos revelados por rolagem (o tradutor já tem a cena animada; as outras três usam a ilustração do cartão, revelada por camadas, até a Fase 3). Fechamento com números grandes e selos de natureza na mesma linha; resultados coletivos numa caixa própria com a legenda obrigatória e o aviso de não somar; lacuna declarada com fio vermelho.
+- **D-22 No celular, o texto do passo vira uma folha presa à base da tela** (sticky), só a do passo ativo visível. Resolve a sobreposição apontada na Fase 1.
+- **D-23 Matriz 2×2 com ilustração própria por entrega.** Base viva: dois domínios e pontos que atravessam e voltam; speech analytics: conversa com reticências vermelhas (o travamento) → tabela → duas saídas; comentários: duas leituras opostas, circuito de avaliação, ligação vermelha ao incentivo; tradutor: falas → nós, nota vermelha. No hover/foco, as partes se deslocam.
+- **D-24 Trajetória = régua 2021–2026 + passagens expansíveis no lugar** (botões com `aria-expanded`, Visagio aberta por padrão). Cada frente liga período, papel, cliente anonimizado, itens com número e selo, e links para as entregas relacionadas, que abrem o painel.
+- **D-25 Barra superior aparece só depois da abertura**, para não competir com a primeira tela.
+- **D-26 Estudos da Fase 1 preservados em `/estudos/`.**
+
+## Em aberto (para a Fase 3)
+
+- Palcos próprios de base viva, speech analytics e comentários (hoje: ilustração revelada por camadas, com legenda dizendo isso).
+- Arte da abertura sem JS (SVG estático) e grão discreto.
+- Texto do "Sobre" é rascunho, marcado na página para revisão do Gustavo.

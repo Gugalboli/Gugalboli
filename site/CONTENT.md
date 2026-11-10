@@ -30,6 +30,49 @@ Cada afirmação ou número publicado e de onde vem. Fontes: o prompt v10 (`prom
 | +R$ 1,7 mi/ano; 40+ oportunidades; 20 priorizadas; desbloqueios e estornos efetivados | `Evidências e métricas.md` (confirmação de 13/10/2026) | **Realizado; resultado do projeto, não da ferramenta; coletivo** — rotulado assim, fora do gráfico principal |
 | Falas, nós, oportunidades e ponderação no palco | criados para a ilustração | **Sintéticos**, rotulados "◇ Ilustração sintética" no próprio palco |
 
+## Entregas — base viva, speech analytics, motor de comentários
+
+| Afirmação | Fonte | Natureza / cuidado |
+| --- | --- | --- |
+| Problema da base viva (decisões dispersas, versões divergentes, investigação repetida) | prompt; `Entregável - Base viva…` | — |
+| Dois grafos (gestão/análises; analítico em GitLab + CLI Databricks), usados por vários consultores e por agentes | prompt; mesma nota e complemento de 22/10/2026 | **Em uso; autoria pessoal** |
+| Decisões de arquitetura (estado vigente vs. histórico, proveniência, recuperação seletiva, integridade mecânica, aprendizado devolvido, IA propõe/consultor decide) | prompt; mesma nota | — |
+| Ciclo semanal de skills testado e abandonado | prompt; mesma nota | Simplificação honesta |
+| **Ganho de tempo/custo não quantificado** | prompt; `Evidências e métricas.md` | **Lacuna declarada** na página |
+| Não é banco de grafo / embeddings / GraphRAG | prompt; mesma nota | — |
+| Agente no Salesforce, carteira de 30% de uma faixa de cobrança | prompt; `Evidências e métricas.md` | Contexto; não é 30% de toda a carteira |
+| ~15 perguntas por transcrição; SQL no Databricks + modelo interno; dashboard + tabela de causa raiz | prompt; idem | Estrutura confirmada; o agente é da companhia |
+| **40% dos atendimentos travavam** nas primeiras versões | prompt; idem | **Diagnóstico inicial**, não taxa de erro do modelo |
+| **30+ melhorias** no backlog e roadmap | prompt; idem | **Backlog**, não "30 implementadas" |
+| **R$ 1 mi/ano** de economia; **R$ 9 mi/ano** de arrecadação incremental | prompt; idem | **Realizados, anualizados, coletivos**; legenda "Resultados do projeto; o speech analytics apoiou sua evolução, sem parcela exclusiva apurada" visível; aviso de não somar |
+| ~120 mil atendimentos/ano em mídias sociais | prompt; `Evidências e métricas.md` | **Escopo** do projeto, não volume do motor |
+| Polaridade/tema por LLM; revisão humana, segundo modelo, pior quartil, ajuste iterativo | prompt; `Entregável - Motor de análise…` | Pior quartil = triagem, dito na página |
+| Divergência ligada ao incentivo; remuneração variável revista | prompt; idem | Sem culpa a atendentes |
+| **>90% de acurácia conjunta** | prompt; idem | **Reportado; amostra não informada** |
+| Em produção; usado por marketing e gestão do atendimento; reutilizado | prompt; idem | Qualitativo |
+| Exemplo "estou verificando" | prompt | Descrição do padrão de travamento, não transcrição real |
+
+## Trajetória (`src/content/trajetoria.pt.json`)
+
+| Afirmação | Fonte | Natureza / cuidado |
+| --- | --- | --- |
+| Períodos e papéis (Ayra, Haleon, Herbarium, Visagio) | prompt, `<quem_e_gustavo>` | — |
+| ~R$ 33 mi/ano em assessorias | prompt; `Evidências e métricas.md` | **Escopo** (dimensão), não economia |
+| Atribuição das POCs (disparo > interação com IA; A/B, medição contínua) | prompt | Coletivo |
+| R$ 1 mi/ano; R$ 9 mi/ano | ver acima | Realizado, anualizado, coletivo; aviso de não somar |
+| 40+ oportunidades / 20 priorizadas; +R$ 1,7 mi/ano | prompt; `Evidências e métricas.md` | Escopo / **realizado**, coletivo |
+| 5 áreas, 25+ dores, 35+ planos, 6 frentes | prompt | **Escopo** |
+| Modelo operacional e troca de software implementados | prompt; idem | **Implementado** |
+| 62%→30% sentimento negativo; CSAT 3,8→4,5 | prompt; idem | **Metas** de 12 meses, rotuladas "meta · não é resultado" |
+| 200+ representantes em todos os estados | prompt; idem | **Escopo** (alcance) |
+| VBA | prompt; idem | Qualitativo, sem horas medidas |
+| Herbarium "sem impacto consolidado" | prompt | Apresentado com honestidade |
+| Formação, certificações, iniciativas pessoais, ferramentas | prompt | Bootcamp e IxDF identificados como formativos/complementares |
+
+## Sobre (rascunho)
+
+Texto em primeira pessoa escrito a partir de `<tese_e_mensagem>` e do perfil do prompt. **Marcado na página como rascunho para revisão do Gustavo.**
+
 ## Não publicado (de propósito)
 
 - HTML interno "Graph Knowledge to Action", vault operacional, `Carreira/Portfólio/Site/`, `Carreira/ContraCheques/`: não abertos nem usados.

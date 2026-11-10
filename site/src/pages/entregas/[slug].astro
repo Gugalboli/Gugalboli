@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Home from '../../components/Home.astro';
+export function getStaticPaths() {
+  const mods = import.meta.glob('../../content/entregas/*.pt.json', { eager: true }) as Record<string, any>;
+  return Object.entries(mods)
+    .filter(([k]) => !k.includes('/mermaid.pt.json'))
+    .map(([, m]) => (m.default ?? m))
+    .map((e) => ({ params: { slug: e.slug }, props: { e } }));
+}
+const { e } = Astro.props;
+---
+<Base title={`${e.titulo} — Gustavo Albuquerque`} description={e.linha}>
+  <Home open={e.slug} />
+</Base>
