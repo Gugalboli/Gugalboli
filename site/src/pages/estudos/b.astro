@@ -1,0 +1,134 @@
+---
+import Base from '../../layouts/Base.astro';
+import c from '../../content/abertura.pt.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="Estudo B — A equação · Gustavo Albuquerque">
+  <main id="conteudo" class="page">
+    <header class="mast">
+      <p class="who"><strong>{c.nome}</strong><span class="where">{c.atuacao} · {c.local}</span></p>
+      <nav aria-label="Seções">
+        <a href="#entregas">Entregas</a><a href="#trajetoria">Trajetória</a><a href={`mailto:${c.contato.email}`}>Contato</a>
+      </nav>
+    </header>
+
+    <section class="lead">
+      <p class="eyebrow">Estudo B · A equação</p>
+      <h1 class="serif">{c.definicao}</h1>
+      <p class="prop">{c.proposta}</p>
+    </section>
+
+    <figure class="eq" aria-labelledby="eq-cap">
+      <div class="eq-art">
+        <canvas role="img" data-art aria-label="Três colunas. À esquerda, um trecho de tempo em vermelho sólido, sempre do mesmo tamanho. No centro, três camadas de pontos — negócio, técnica e IA. À direita, uma esfera de pontos com núcleo vermelho, cuja área cresce conforme as camadas ativas."></canvas>
+        <div class="labels" aria-hidden="true" data-labels></div>
+        <span class="op op-x serif" aria-hidden="true">×</span>
+        <span class="op op-eq serif" aria-hidden="true">=</span>
+      </div>
+      <div class="eq-keys">
+        <div class="key"><span class="serif sym">t</span><span>tempo e esforço — o mesmo trecho, sempre</span></div>
+        <div class="key">
+          <span class="serif sym">L</span><span>alavancagem — o repertório que multiplica</span>
+          <div class="toggles" role="group" aria-label="Camadas de alavancagem">
+            <button type="button" aria-pressed="true" data-layer="0">Negócio</button>
+            <button type="button" aria-pressed="true" data-layer="1">Técnica</button>
+            <button type="button" aria-pressed="true" data-layer="2">IA</button>
+          </div>
+        </div>
+        <div class="key"><span class="serif sym">U</span><span>efeito — com o esforço humano no centro</span></div>
+      </div>
+      <figcaption id="eq-cap" class="illus">{c.formula.expr} · {c.formula.legenda} {c.formula.fonte}</figcaption>
+    </figure>
+
+    <ol class="index">
+      {c.sinteses.map((s, i) => (
+        <li><a href={s.href}><span class="mono n">0{i + 1}</span><span class="eyebrow">{s.rotulo}</span><span class="t">{s.texto}</span></a></li>
+      ))}
+    </ol>
+
+    <p class="cta">
+      <a class="btn btn--ink" href={`${base}/estudos/mermaid`}>Ver uma entrega</a>
+      <a class="btn" href={`mailto:${c.contato.email}`}>Conversar por email</a>
+      <a class="btn" href={c.contato.linkedin} rel="me noopener">LinkedIn</a>
+      <a class="back" href={`${base}/`}>← estudos</a>
+    </p>
+  </main>
+</Base>
+
+<style>
+  .page { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter) 64px; min-height: 100svh; display: flex; flex-direction: column; }
+  .mast { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 12px; border-bottom: 1px solid var(--ink); gap: 16px; }
+  .who { margin: 0; display: flex; gap: 14px; align-items: baseline; }
+  .who strong { font-weight: 600; letter-spacing: -0.01em; }
+  .where { color: var(--ink-3); font-size: var(--step--1); }
+  .mast nav { display: flex; gap: 18px; font-size: var(--step--1); }
+  .mast nav a { text-decoration: none; }
+  .lead { padding: clamp(20px, 4vh, 44px) 0 0; display: grid; grid-template-columns: 1.3fr 1fr; column-gap: 48px; align-items: end; }
+  .lead .eyebrow { grid-column: 1 / -1; margin: 0 0 10px; }
+  .lead h1 { font-size: var(--step-4); font-weight: 400; line-height: 0.98; letter-spacing: -0.02em; margin: 0; }
+  .prop { margin: 0; color: var(--ink-2); max-width: 44ch; padding-bottom: 6px; }
+
+  .eq { margin: clamp(8px, 2vh, 24px) 0 0; }
+  .eq-art { position: relative; height: clamp(220px, 34vh, 360px); }
+  .eq-art canvas { width: 100%; height: 100%; touch-action: pan-y; }
+  .labels { position: absolute; inset: 0; pointer-events: none; }
+  .labels :global(span) { position: absolute; left: 0; top: 0; font: 500 0.72rem/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); white-space: nowrap; transition: color .3s; }
+  .labels :global(span.ink) { color: var(--ink); }
+  .op { position: absolute; top: 50%; transform: translate(-50%, -54%); font-size: var(--step-3); color: var(--ink-3); pointer-events: none; }
+  .op-x { left: 31%; }
+  .op-eq { left: 64%; }
+  .eq-keys { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--line); }
+  .key { padding: 12px 16px 0 0; display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; font-size: 0.9rem; color: var(--ink-2); }
+  .sym { font-size: 1.6rem; font-style: italic; color: var(--ink); line-height: 1; }
+  .toggles { grid-column: 1 / -1; display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .toggles button { font: 500 0.75rem/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+  .toggles button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  .toggles button[aria-pressed='true']::before { content: '✓ '; }
+  figcaption { margin-top: 12px; }
+
+  .index { list-style: none; padding: 0; margin: clamp(16px, 3vh, 32px) 0 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); }
+  .index a { display: grid; gap: 6px; padding: 14px 18px 14px 0; text-decoration: none; height: 100%; }
+  .index li + li a { padding-left: 18px; border-left: 1px solid var(--line); }
+  .index a:hover { color: inherit; }
+  .index a:hover .n { color: var(--red); }
+  .n { color: var(--ink-3); }
+  .t { color: var(--ink-2); font-size: 0.9rem; line-height: 1.45; }
+  .cta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 20px 0 0; }
+  .btn { font: 500 0.88rem/1 var(--sans); text-decoration: none; border: 1px solid var(--ink); border-radius: 999px; padding: 11px 16px; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn--ink { background: var(--ink); color: var(--paper); }
+  .btn--ink:hover { background: var(--red); border-color: var(--red); }
+  .back { margin-left: auto; font-size: var(--step--1); color: var(--ink-3); }
+
+  @media (max-width: 759px) {
+    .mast nav { display: none; }
+    .lead { grid-template-columns: 1fr; row-gap: 12px; }
+    .lead h1 { font-size: var(--step-3); }
+    .prop { font-size: 0.95rem; }
+    .eq-art { height: 220px; }
+    .who { flex-direction: column; gap: 2px; }
+    .eq-keys { grid-template-columns: 1fr; }
+    .key { padding: 10px 0 0; }
+    .index { grid-template-columns: 1fr 1fr; }
+    .index li:nth-child(3) a { padding-left: 0; border-left: 0; }
+    .index li:nth-child(n + 3) a { border-top: 1px solid var(--line); }
+    .op-x { left: 30.5%; } .op-eq { left: 63.5%; }
+  }
+</style>
+
+<script>
+  import { DotField, labelLayer } from '../../lib/dots';
+  import { equation, eqState } from '../../lib/scenes-b';
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-art]')!;
+  const field = new DotField(canvas, [equation], { count: innerWidth < 760 ? 700 : 1300, onLabels: labelLayer(document.querySelector('[data-labels]')!) });
+  field.setStill(document.documentElement.classList.contains('still'));
+  addEventListener('motionchange', (e) => field.setStill((e as CustomEvent).detail));
+  document.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((b) => {
+    b.addEventListener('click', () => {
+      const k = +b.dataset.layer!;
+      eqState.layers[k] = !eqState.layers[k];
+      b.setAttribute('aria-pressed', String(eqState.layers[k]));
+      field.rebuild();
+    });
+  });
+</script>

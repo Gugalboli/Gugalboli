@@ -1,0 +1,42 @@
+---
+import '../styles/base.css';
+interface Props { title: string; description?: string; }
+const { title, description = 'Gustavo Albuquerque — produto, dados e IA aplicada a problemas de negócio.' } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5f2ed" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try { if (localStorage.getItem('motion') === 'off') document.documentElement.classList.add('still'); } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <slot />
+    <button class="motion-toggle" type="button" aria-pressed="false" data-motion-toggle>Pausar movimento</button>
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>('[data-motion-toggle]')!;
+      const root = document.documentElement;
+      const sync = () => {
+        const off = root.classList.contains('still');
+        btn.setAttribute('aria-pressed', String(off));
+        btn.textContent = off ? 'Retomar movimento' : 'Pausar movimento';
+      };
+      btn.addEventListener('click', () => {
+        root.classList.toggle('still');
+        try { localStorage.setItem('motion', root.classList.contains('still') ? 'off' : 'on'); } catch (e) {}
+        sync();
+        dispatchEvent(new CustomEvent('motionchange', { detail: root.classList.contains('still') }));
+      });
+      sync();
+    </script>
+  </body>
+</html>

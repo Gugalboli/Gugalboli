@@ -1,0 +1,386 @@
+---
+import Base from '../../layouts/Base.astro';
+import e from '../../content/entregas/mermaid.pt.json';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Palco (viewBox 600 × 780). Posições finais (v2 consolidada); o script recua para a v1.
+const CH = 8.4; // largura de caractere do IBM Plex Mono a 14px
+const lines = [
+  { t: '— Quando chega o ofício, a gente', hl: [10, 24] },
+  { t: '  confere o processo no sistema.', hl: [2, 31] },
+  { t: '— Depois pede o subsídio pra área…', hl: [9, 33] },
+  { t: '— Se for bloqueio, vai pro financeiro.', hl: [2, 38] },
+  { t: '— No fim, a resposta ao juízo sai daqui.', hl: [10, 29] },
+];
+const LX = 40, LY0 = 96, LH = 30;
+const nodes = [
+  { id: 'n1', label: 'Ofício recebido', x: 40, y: 300, w: 250, src: 0 },
+  { id: 'n2', label: 'Confere processo no sistema', x: 40, y: 424, w: 250, src: 1, shift: true, opp: 1 },
+  { id: 'n3', label: 'Pede subsídio à área', x: 40, y: 486, w: 250, src: 2, shift: true, opp: 2 },
+  { id: 'n4', label: 'É bloqueio?', x: 40, y: 548, w: 250, src: 3, shift: true },
+  { id: 'n5', label: 'Financeiro executa', x: 330, y: 548, w: 200, src: 3, shift: true },
+  { id: 'n6', label: 'Resposta ao juízo', x: 40, y: 610, w: 250, src: 4, shift: true },
+];
+const NH = 40;
+const ins = { id: 'nT', label: 'Triagem por tema', x: 40, y: 362, w: 250 };
+const edgesMain = [
+  ['n2', 'n3'], ['n3', 'n4'], ['n4', 'n6'],
+];
+const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+const srcOf = (n: (typeof nodes)[number]) => {
+  const l = lines[n.src];
+  return { x0: LX + l.hl[0] * CH, x1: LX + l.hl[1] * CH, y: LY0 + n.src * LH + 6 };
+};
+---
+<Base title={`${e.titulo} — estudo de cena · Gustavo Albuquerque`}>
+  <main id="conteudo">
+    <header class="case-head">
+      <p class="crumbs"><a href={`${base}/`}>← estudos</a> <span class="eyebrow">Entrega 04 · cena de estudo</span></p>
+      <h1 class="serif">{e.titulo}</h1>
+      <p class="linha">{e.linha}</p>
+      <dl class="synth">
+        <div><dt class="eyebrow">Contexto</dt><dd>{e.sintese.contexto}</dd></div>
+        <div><dt class="eyebrow">Minha contribuição</dt><dd>{e.sintese.contribuicao}</dd></div>
+        <div><dt class="eyebrow">Evidência principal</dt><dd>{e.sintese.evidencia} <span class="tag">realizado · equipe</span></dd></div>
+      </dl>
+    </header>
+
+    <section class="scrolly" data-scrolly>
+      <div class="stage-col">
+        <div class="stage">
+          <svg viewBox="0 0 600 780" role="img" aria-labelledby="stage-title stage-desc" data-stage>
+            <title id="stage-title">Da transcrição ao fluxo consolidado</title>
+            <desc id="stage-desc">Ilustração sintética. No alto, cinco falas de uma entrevista. Abaixo, o fluxo gerado: ofício recebido, triagem por tema (inserida pela revisão da equipe), confere processo no sistema, pede subsídio à área, é bloqueio? — se sim, financeiro executa —, resposta ao juízo. Duas oportunidades marcadas e uma nota de ponderação da equipe.</desc>
+
+            <!-- transcrição -->
+            <g class="transcript">
+              <rect x="20" y="40" width="560" height="214" rx="4" class="card" />
+              <text x="40" y="68" class="meta">ENTREVISTA · ANALISTA</text>
+              <text x="560" y="68" class="meta" text-anchor="end">◇ ILUSTRAÇÃO SINTÉTICA</text>
+              {lines.map((l, i) => (
+                <g class="line" data-line={i}>
+                  <line class="hl" x1={LX + l.hl[0] * CH} x2={LX + l.hl[1] * CH} y1={LY0 + i * LH + 6} y2={LY0 + i * LH + 6} pathLength="1" />
+                  <text x={LX} y={LY0 + i * LH} class="speech" xml:space="preserve">{l.t}</text>
+                </g>
+              ))}
+            </g>
+
+            <text x="40" y="284" class="meta" data-v>FLUXO · <tspan data-vlabel>V2 CONSOLIDADA</tspan></text>
+
+            <!-- arestas -->
+            <g class="edges">
+              <line class="edge" data-edge="n1-nT" x1="165" x2="165" y1={300 + NH} y2="362" pathLength="1" />
+              <line class="edge" data-edge="nT-n2" x1="165" x2="165" y1={362 + NH} y2="424" pathLength="1" />
+              <line class="edge edge-v1" data-edge="n1-n2" x1="165" x2="165" y1={300 + NH} y2="362" pathLength="1" />
+              <g data-shift>
+                {edgesMain.map(([a, b]) => (
+                  <line class="edge" data-edge={`${a}-${b}`} x1="165" x2="165" y1={byId[a].y + NH} y2={byId[b].y} pathLength="1" />
+                ))}
+                <line class="edge" data-edge="n4-n5" x1="290" x2="330" y1={548 + NH / 2} y2={548 + NH / 2} pathLength="1" />
+                <text x="300" y={548 + NH / 2 - 6} class="meta tiny">SIM</text>
+                <text x="172" y={548 + NH + 15} class="meta tiny">NÃO</text>
+              </g>
+            </g>
+
+            <!-- nós -->
+            <g class="node" data-node="n1">
+              <rect class="dotted" x="40" y="300" width="250" height={NH} rx="3" />
+              <rect class="solid" x="40" y="300" width="250" height={NH} rx="3" />
+              <text x="54" y={300 + 25}>Ofício recebido</text>
+            </g>
+            <g class="node node-ins" data-node="nT">
+              <rect class="dotted red" x={ins.x} y={ins.y} width={ins.w} height={NH} rx="3" />
+              <rect class="solid red" x={ins.x} y={ins.y} width={ins.w} height={NH} rx="3" />
+              <text x="54" y={ins.y + 25}>{ins.label}</text>
+            </g>
+            <g data-shift>
+              {nodes.slice(1).map((n) => (
+                <g class="node" data-node={n.id}>
+                  <rect class="dotted" x={n.x} y={n.y} width={n.w} height={NH} rx="3" />
+                  <rect class="solid" x={n.x} y={n.y} width={n.w} height={NH} rx="3" />
+                  <text x={n.x + 14} y={n.y + 25}>{n.label}</text>
+                  {n.opp && <g class="opp" data-opp={n.opp}><circle cx={n.x + n.w + 18} cy={n.y + NH / 2} r="11" /><text x={n.x + n.w + 18} y={n.y + NH / 2 + 4.5} text-anchor="middle">{n.opp}</text></g>}
+                </g>
+              ))}
+            </g>
+
+            <!-- ponderação da equipe -->
+            <g class="note" data-note>
+              <path class="note-link" d="M330 352 C 312 352, 306 382, 290 382" pathLength="1" />
+              <rect x="330" y="300" width="250" height="96" rx="3" />
+              <text x="346" y="324" class="meta red">PONDERAÇÃO DA EQUIPE</text>
+              <text x="346" y="348">A triagem por tema vem</text>
+              <text x="346" y="368">antes da consulta ao sistema.</text>
+              <text x="346" y="388" class="meta" data-note-ok>✓ INCORPORADA NA V2</text>
+            </g>
+
+            <!-- oportunidades -->
+            <g class="opps" data-opps>
+              <text x="330" y="680" class="meta">OPORTUNIDADES CITADAS</text>
+              <circle cx="341" cy="701" r="9" class="mini" /><text x="341" y="705" class="mini-t" text-anchor="middle">1</text>
+              <text x="358" y="706">Consulta repetida ao sistema</text>
+              <circle cx="341" cy="727" r="9" class="mini" /><text x="341" y="731" class="mini-t" text-anchor="middle">2</text>
+              <text x="358" y="732">Subsídio pedido sem padrão</text>
+            </g>
+
+            <!-- saída -->
+            <g class="out" data-out>
+              <line class="edge" x1="165" x2="165" y1={610 + NH} y2="690" pathLength="1" />
+              <path d="M120 690 h74 l16 16 v58 h-90 z" class="doc" />
+              <path d="M194 690 v16 h16" class="doc-fold" />
+              <text x="134" y="728" class="meta">PARA O</text>
+              <text x="134" y="744" class="meta">CLIENTE</text>
+            </g>
+
+            <!-- pontos em trânsito (criados pelo script) -->
+            <g class="flying" data-fly aria-hidden="true"></g>
+          </svg>
+        </div>
+      </div>
+
+      <ol class="steps">
+        {e.passos.map((p, i) => (
+          <li class="step" data-step={i}>
+            <p class="eyebrow"><span class="num">0{i + 1}</span> {p.rotulo}</p>
+            <h2 class="serif">{p.titulo}</h2>
+            <p>{p.texto}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="closing" aria-labelledby="fech">
+      <p class="eyebrow">Fechamento</p>
+      <h2 id="fech" class="serif">O diagnóstico terminou na metade do prazo previsto.</h2>
+      <figure class="bars">
+        <div class="bar-row">
+          <span class="bar-l">Planejado</span>
+          <span class="bar-track"><span class="bar bar--plan" style={`--v:${e.fechamento.planejado / 4}`}></span></span>
+          <span class="bar-v mono">{e.fechamento.planejado} {e.fechamento.unidade}</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-l">Realizado</span>
+          <span class="bar-track"><span class="bar bar--real" style={`--v:${e.fechamento.realizado / 4}`}></span><span class="bar-gap" style={`--v:${e.fechamento.realizado / 4}`}><span class="mono">−50%</span></span></span>
+          <span class="bar-v mono">{e.fechamento.realizado} {e.fechamento.unidade}</span>
+        </div>
+        <div class="axis mono" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span><span>4 meses</span></div>
+        <figcaption>
+          <p>{e.fechamento.legenda}</p>
+          <p class="tags">{e.fechamento.natureza.map((t, i) => <span class={`tag ${i === 0 ? 'tag--red' : ''}`}>{t}</span>)}</p>
+          <p class="limit">{e.fechamento.limite}</p>
+        </figcaption>
+      </figure>
+      <aside class="ctx">
+        <p class="eyebrow">Contexto do projeto</p>
+        <p>{e.fechamento.contexto_projeto}</p>
+        <p class="tags">{e.fechamento.contexto_natureza.map((t) => <span class="tag">{t}</span>)}</p>
+      </aside>
+      <p class="nav-next"><a href={`${base}/estudos/a`}>← Estudo A</a> · <a href={`${base}/estudos/b`}>Estudo B</a> · <a href={`${base}/`}>Todos os estudos</a></p>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .case-head { max-width: var(--max); margin: 0 auto; padding: 20px var(--gutter) 28px; display: grid; grid-template-columns: 1.1fr 1fr; column-gap: 48px; }
+  .crumbs { grid-column: 1 / -1; display: flex; gap: 16px; align-items: baseline; margin: 0 0 24px; font-size: var(--step--1); }
+  .case-head h1 { font-size: var(--step-4); line-height: 0.98; font-weight: 400; letter-spacing: -0.02em; margin: 0; }
+  .linha { font-size: var(--step-1); line-height: 1.35; color: var(--ink-2); margin: 0; align-self: end; }
+  .synth { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); margin: 32px 0 0; border-top: 1px solid var(--ink); }
+  .synth div { padding: 14px 20px 0 0; }
+  .synth div + div { padding-left: 20px; border-left: 1px solid var(--line); }
+  .synth dd { margin: 6px 0 0; font-size: 0.95rem; color: var(--ink-2); }
+
+  .scrolly { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); column-gap: 56px; }
+  .stage-col { grid-column: 2; grid-row: 1; }
+  .stage { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; justify-content: center; padding: 16px 0; }
+  .stage svg { width: 100%; height: 100%; max-height: 92svh; overflow: visible; }
+  .steps { grid-column: 1; grid-row: 1; list-style: none; margin: 0; padding: 0; }
+  .step { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; max-width: 40ch; }
+  .step h2 { font-size: var(--step-2); line-height: 1.08; font-weight: 400; margin: 8px 0 14px; }
+  .step p:last-child { color: var(--ink-2); }
+  .num { color: var(--red); }
+  :global(html.js) .step > * { color: var(--ink-3); transition: color .5s var(--ease), opacity .5s var(--ease); }
+  :global(html.js) .step.is-active > * { color: var(--ink); }
+  :global(html.js) .step.is-active > p:last-child { color: var(--ink-2); }
+
+  /* --- SVG --- */
+  svg :global(text) { font-family: var(--sans); font-size: 15px; fill: var(--ink); }
+  .card { fill: #fffdf9; stroke: var(--line); }
+  .meta { font-family: var(--mono) !important; font-size: 11.5px !important; letter-spacing: .06em; fill: var(--ink-3) !important; }
+  .meta.red { fill: var(--red) !important; }
+  .tiny { font-size: 10px !important; }
+  .speech { font-family: var(--mono) !important; font-size: 14px !important; white-space: pre; }
+  .hl { stroke: var(--red-soft); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .edge { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .edge-v1 { opacity: 0; }
+  .node rect { fill: var(--paper); }
+  .node .dotted { stroke: var(--ink); stroke-width: 2.2; stroke-dasharray: 0.1 6; stroke-linecap: round; opacity: 0; }
+  .node .solid { stroke: var(--ink); stroke-width: 1.2; fill: #fffdf9; }
+  .node .red { stroke: var(--red); }
+  .node-ins .solid { fill: #fbf1ef; }
+  .opp circle { fill: var(--paper); stroke: var(--red); stroke-width: 1.4; }
+  .opp text { font-family: var(--mono); font-size: 12px; fill: var(--red); }
+  .mini { fill: var(--paper); stroke: var(--red); stroke-width: 1.2; }
+  .mini-t { font-family: var(--mono); font-size: 11px !important; fill: var(--red) !important; }
+  .note rect { fill: #fbf1ef; stroke: var(--red); stroke-width: 1.2; }
+  .note-link { fill: none; stroke: var(--red); stroke-width: 1.2; stroke-dasharray: 1; }
+  .doc { fill: #fffdf9; stroke: var(--ink); stroke-width: 1.2; }
+  .doc-fold { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+  .flying :global(circle) { fill: var(--ink); }
+
+  /* --- Fechamento --- */
+  .closing { max-width: 980px; margin: 0 auto; padding: 18vh var(--gutter) 14vh; }
+  .closing h2 { font-size: var(--step-3); line-height: 1.04; font-weight: 400; margin: 10px 0 36px; max-width: 18ch; }
+  .bars { margin: 0; }
+  .bar-row { display: grid; grid-template-columns: 7.5em 1fr 6em; align-items: center; gap: 16px; padding: 8px 0; }
+  .bar-l { font-size: 0.95rem; }
+  .bar-track { position: relative; height: 34px; }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--v) * 100%); }
+  .bar--plan { background: var(--stone); }
+  .bar--real { background: var(--ink); }
+  .bar-gap { position: absolute; top: 0; bottom: 0; left: calc(var(--v) * 100%); right: 0; border: 1px dashed var(--red); border-left: 2px solid var(--red); display: flex; align-items: center; justify-content: center; }
+  .bar-gap span { color: var(--red); font-size: 0.8rem; }
+  .bar-v { font-size: 0.85rem; text-align: right; }
+  .axis { display: flex; justify-content: space-between; margin-left: calc(7.5em + 16px); margin-right: calc(6em + 16px); color: var(--ink-3); font-size: 0.7rem; border-top: 1px solid var(--line); padding-top: 4px; }
+  figcaption { margin-top: 20px; }
+  figcaption p { margin: 0 0 8px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .limit { color: var(--ink-3); font-size: 0.9rem; }
+  .ctx { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-2); max-width: 64ch; }
+  .ctx p { margin: 0 0 8px; }
+  .nav-next { margin-top: 56px; font-size: var(--step--1); }
+  :global(html.js) .bar { transform-origin: left; transform: scaleX(0); transition: transform 1.1s var(--ease); }
+  :global(html.js) .bar-gap { opacity: 0; transition: opacity .6s .9s; }
+  :global(html.js) .closing.is-in .bar { transform: none; }
+  :global(html.js) .closing.is-in .bar--real { transition-delay: .25s; }
+  :global(html.js) .closing.is-in .bar-gap { opacity: 1; }
+
+  @media (max-width: 899px) {
+    .case-head { grid-template-columns: 1fr; row-gap: 12px; }
+    .case-head h1 { font-size: var(--step-3); }
+    .synth { grid-template-columns: 1fr; }
+    .synth div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+    .synth div { padding: 12px 0; }
+    .scrolly { grid-template-columns: 1fr; }
+    .stage-col, .steps { grid-column: 1; grid-row: 1; }
+    .stage { height: 100svh; align-items: flex-start; padding-top: 10px; }
+    .stage svg { height: auto; max-height: 60svh; }
+    .steps { position: relative; z-index: 1; pointer-events: none; }
+    .step { min-height: 110svh; justify-content: flex-end; padding-bottom: 6svh; max-width: none; }
+    .step > * { background: var(--paper); margin: 0; padding: 4px 0; }
+    :global(html.js) .step:not(.is-active) > * { opacity: 0; }
+    .step h2 { padding-top: 10px; }
+    .bar-row { grid-template-columns: 5.5em 1fr 4.5em; gap: 10px; }
+    .axis { margin-left: calc(5.5em + 10px); margin-right: calc(4.5em + 10px); }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const svg = document.querySelector<SVGSVGElement>('[data-stage]')!;
+  const q = <T extends Element = SVGElement>(s: string) => svg.querySelector<T>(s)!;
+  const qa = (s: string) => [...svg.querySelectorAll<SVGElement>(s)];
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still');
+
+  // Dados de origem (falas → nós): espelham o frontmatter
+  const CH = 8.4, LX = 40, LY0 = 96, LH = 30;
+  const hl: [number, number][] = [[10, 24], [2, 31], [9, 33], [2, 38], [10, 29]];
+  const targets: { id: string; src: number; x: number; y: number; w: number }[] = [
+    { id: 'n1', src: 0, x: 40, y: 300, w: 250 },
+    { id: 'n2', src: 1, x: 40, y: 362, w: 250 },
+    { id: 'n3', src: 2, x: 40, y: 424, w: 250 },
+    { id: 'n4', src: 3, x: 40, y: 486, w: 250 },
+    { id: 'n5', src: 3, x: 330, y: 486, w: 200 },
+    { id: 'n6', src: 4, x: 40, y: 548, w: 250 },
+  ];
+
+  // pontos que viajam da fala sublinhada até o contorno do nó
+  const fly = q('[data-fly]');
+  const dots: { el: SVGCircleElement; to: { x: number; y: number } }[] = [];
+  targets.forEach((t) => {
+    const per = 16;
+    for (let k = 0; k < per; k++) {
+      const c = document.createElementNS(NS, 'circle');
+      const fx = LX + hl[t.src][0] * CH + ((hl[t.src][1] - hl[t.src][0]) * CH * k) / (per - 1);
+      const fy = LY0 + t.src * LH + 6;
+      c.setAttribute('cx', String(fx)); c.setAttribute('cy', String(fy)); c.setAttribute('r', '1.8');
+      // destino: perímetro do retângulo
+      const per2 = 2 * (t.w + 40), d = (per2 * k) / per;
+      const to = d < t.w ? { x: t.x + d, y: t.y } : d < t.w + 40 ? { x: t.x + t.w, y: t.y + d - t.w } : d < 2 * t.w + 40 ? { x: t.x + t.w - (d - t.w - 40), y: t.y + 40 } : { x: t.x, y: t.y + 40 - (d - 2 * t.w - 40) };
+      fly.append(c); dots.push({ el: c, to });
+    }
+  });
+
+  // estado inicial (v1, antes da revisão)
+  const shift = qa('[data-shift]');
+  const setV1Label = (v2: boolean) => (q('[data-vlabel]').textContent = v2 ? 'V2 CONSOLIDADA' : 'V1 · GERADA PELO MODELO');
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.inOut' } });
+  // 0 → ouvir: falas aparecem e os trechos são sublinhados
+  tl.addLabel('s0');
+  tl.fromTo(qa('.line text'), { opacity: 0, y: 6 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.4 }, 0);
+  tl.fromTo(qa('.line .hl'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger: 0.12, duration: 0.4 }, 0.3);
+  tl.addLabel('s1', 1);
+  // 1 → traduzir: pontos voam e formam os nós (contorno pontilhado), arestas se desenham
+  const allNodes = qa('.node:not(.node-ins)');
+  tl.set(fly, { opacity: 1 }, 's1');
+  tl.fromTo(dots.map((d) => d.el), { opacity: 0 }, { opacity: 1, duration: 0.1, stagger: 0.002 }, 's1');
+  dots.forEach((d, i) => tl.to(d.el, { attr: { cx: d.to.x, cy: d.to.y }, duration: 0.55, ease: 'power3.inOut' }, `s1+=${0.05 + (i % 16) * 0.008 + Math.floor(i / 16) * 0.05}`));
+  tl.fromTo(allNodes.map((n) => n.querySelector('.dotted')), { opacity: 0 }, { opacity: 1, duration: 0.15, stagger: 0.04 }, 's1+=0.6');
+  tl.fromTo(allNodes.map((n) => n.querySelector('text')), { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.04 }, 's1+=0.65');
+  tl.to(dots.map((d) => d.el), { opacity: 0, duration: 0.15 }, 's1+=0.75');
+  tl.fromTo([q('[data-edge="n1-n2"]'), ...qa('[data-shift] .edge'), ...qa('[data-shift] .tiny')], { strokeDashoffset: 1, opacity: 0 }, { strokeDashoffset: 0, opacity: 1, duration: 0.25, stagger: 0.05 }, 's1+=0.7');
+  tl.fromTo(qa('.opp'), { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.2, stagger: 0.08 }, 's1+=0.85');
+  tl.fromTo(q('[data-opps]'), { opacity: 0 }, { opacity: 1, duration: 0.2 }, 's1+=0.9');
+  tl.addLabel('s2', 2);
+  // 2 → revisar: nota vermelha, o fluxo abre espaço e recebe a etapa que faltava
+  tl.fromTo(q('[data-note]'), { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: 0.3 }, 's2');
+  tl.fromTo(q('.note-link'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25 }, 's2+=0.3');
+  tl.fromTo(shift, { y: -62 }, { y: 0, duration: 0.4 }, 's2+=0.35');
+  tl.to(q('[data-edge="n1-n2"]'), { opacity: 0, duration: 0.1 }, 's2+=0.35');
+  tl.fromTo(q('[data-node="nT"]'), { opacity: 0 }, { opacity: 1, duration: 0.25 }, 's2+=0.6');
+  tl.fromTo([q('[data-edge="n1-nT"]'), q('[data-edge="nT-n2"]')], { strokeDashoffset: 1, opacity: 0 }, { strokeDashoffset: 0, opacity: 1, duration: 0.2, stagger: 0.1 }, 's2+=0.7');
+  tl.addLabel('s3', 3);
+  // 3 → consolidar: contornos ficam sólidos, saída para o cliente
+  tl.fromTo(qa('.node .solid'), { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.03 }, 's3');
+  tl.to(qa('.node .dotted'), { opacity: 0, duration: 0.3 }, 's3+=0.1');
+  tl.fromTo(q('[data-note-ok]'), { opacity: 0 }, { opacity: 1, duration: 0.2 }, 's3+=0.2');
+  tl.fromTo(q('[data-out]'), { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3 }, 's3+=0.3');
+  tl.call(() => setV1Label(tl.time() >= 3.05), [], 's3+=0.05');
+  tl.addLabel('end', 4);
+  tl.to({}, { duration: 0.01 }, 4);
+
+  // força a renderização de todos os estados iniciais (from) antes da primeira rolagem
+  tl.progress(1).progress(0);
+  const syncLabel = () => setV1Label(tl.time() >= 3.05);
+
+  // rolagem: cada passo da coluna de texto corresponde a um trecho da linha do tempo
+  const steps = [...document.querySelectorAll<HTMLElement>('[data-step]')];
+  let active = -1;
+  const setActive = (i: number) => {
+    if (i === active) return; active = i;
+    steps.forEach((s, k) => s.classList.toggle('is-active', k === i));
+  };
+  // Um único gatilho: a coluna de passos inteira mapeia a linha do tempo 0 → 4.
+  // Com movimento: scrub suave (avança e recua com a rolagem).
+  // Com movimento reduzido: cada passo mostra seu estado final, sem interpolação.
+  const st = ScrollTrigger.create({
+    trigger: '.steps', start: 'top 72%', end: 'bottom 72%',
+    onUpdate: (self) => {
+      const p = self.progress * 4;
+      setActive(Math.min(3, Math.floor(p)));
+      if (reduce()) { tl.time(Math.min(4, Math.floor(p) + 1)); syncLabel(); return; }
+      gsap.to(tl, { time: p, duration: 0.5, ease: 'power2.out', overwrite: true, onUpdate: syncLabel });
+    },
+    onLeaveBack: () => { setActive(-1); gsap.killTweensOf(tl); tl.time(0); syncLabel(); },
+  });
+  addEventListener('motionchange', () => st.refresh());
+
+  // fechamento: barras entram quando a seção aparece
+  const closing = document.querySelector('.closing')!;
+  new IntersectionObserver(([en], o) => { if (en.isIntersecting) { closing.classList.add('is-in'); o.disconnect(); } }, { threshold: 0.35 }).observe(closing);
+</script>

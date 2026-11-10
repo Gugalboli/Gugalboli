@@ -1,0 +1,28 @@
+{
+  "nome": "Gustavo Albuquerque",
+  "atuacao": "Business Consultant na Visagio · PO e PMO no núcleo de IA aplicada à cobrança",
+  "local": "Rio de Janeiro",
+  "definicao": "Alavancagem é ampliar o efeito do esforço.",
+  "proposta": "Transformo problemas operacionais complexos em hipóteses testáveis, sistemas de IA mensuráveis e decisões de negócio — combinando visão de negócio, letramento técnico e IA.",
+  "formula": {
+    "expr": "U = L · t",
+    "legenda": "Efeito (U) = alavancagem (L) × tempo e esforço (t).",
+    "fonte": "Modelo conceitual de Eero Alvar (“What AI Actually Changes”). Não é medida da minha produtividade."
+  },
+  "sinteses": [
+    { "id": "quem", "rotulo": "Quem sou", "texto": "Administração pela UFRJ. Consultor na Visagio desde 2025; antes, BI e sistemas comerciais na Haleon (ex-GSK).", "href": "#trajetoria" },
+    { "id": "alavanca", "rotulo": "Minha alavanca", "texto": "Entendo o problema de negócio e construo a primeira versão da solução — SQL, Python, IA — para a equipe revisar e decidir.", "href": "#ideia" },
+    { "id": "trajetoria", "rotulo": "Trajetória", "texto": "Ayra → Haleon → Herbarium → Visagio: do rigor com o que se reporta a quem decide até IA em operação.", "href": "#trajetoria" },
+    { "id": "entregas", "rotulo": "Entregas em uso", "texto": "Base viva de conhecimento · speech analytics · motor de comentários · tradutor de transcrições.", "href": "#entregas" }
+  ],
+  "contato": {
+    "email": "gustavo.albuquerque.oliveira.44@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/gustavoalbuquerqueoli"
+  },
+  "capitulos": [
+    { "n": "01", "titulo": "Julgamento humano", "frase": "Antes de construir, escolho o problema e o critério.", "texto": "O foco vem do negócio: o que precisa mudar, para quem e como vamos saber. A IA não decide para onde olhar." },
+    { "n": "02", "titulo": "Trabalho com IA", "frase": "A IA encurta a distância entre entender e construir.", "texto": "Negócio de um lado, técnica do outro. Com SQL, Python e modelos de linguagem, quem entende o problema consegue materializar uma primeira versão revisável — sem deixar de precisar de quem revisa." },
+    { "n": "03", "titulo": "Decisão e uso", "frase": "A construção só conta quando alguém a usa para decidir.", "texto": "A equipe revisa e a solução entra na rotina: um dashboard, uma tabela de causa raiz, um fluxo consolidado. A IA propõe; quem decide é o time." },
+    { "n": "04", "titulo": "Aprendizado", "frase": "O que se aprende volta para o próximo trabalho.", "texto": "Cada análise devolve conhecimento reutilizável — métodos, armadilhas dos dados, decisões — e o ciclo seguinte começa de um ponto mais alto." }
+  ]
+}
