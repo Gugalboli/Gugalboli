@@ -52,6 +52,10 @@ Cada afirmação ou número publicado e de onde vem. Fontes: o prompt v10 (`prom
 | Em produção; usado por marketing e gestão do atendimento; reutilizado | prompt; idem | Qualitativo |
 | Exemplo "estou verificando" | prompt | Descrição do padrão de travamento, não transcrição real |
 
+## Conteúdo dos palcos (Fase 3)
+
+Todos os textos dentro dos palcos — "piloto em março/abril", "Acordos por faixa de atraso", "datas duplicadas", "conversa_1040", as falas do agente e do cliente, "Já mandei mensagem três vezes…", os itens do backlog, as barras dos indicadores — são **sintéticos**, criados para ilustrar o mecanismo, e cada palco traz o rótulo "◇ Ilustração sintética". Não reproduzem dados, decisões ou conversas reais de clientes. As alturas das barras nos palcos são ilustrativas e não representam números.
+
 ## Trajetória (`src/content/trajetoria.pt.json`)
 
 | Afirmação | Fonte | Natureza / cuidado |

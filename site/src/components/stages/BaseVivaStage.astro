@@ -1,0 +1,109 @@
+---
+/** Palco — Base viva de conhecimento. Passos: disperso → duas bases → o que vale hoje → de volta. */
+import '../../styles/stage.css';
+const frags = [
+  { x: 50, y: 74, w: 190, t: 'reunião · 03/mar', k: 'meta' },
+  { x: 330, y: 120, w: 220, t: 'planilha_estado_v3.xlsx', k: 'mono' },
+  { x: 70, y: 250, w: 230, t: 'Decisão: piloto em março', k: 'txt' },
+  { x: 318, y: 312, w: 232, t: 'Decisão: piloto em abril', k: 'txt' },
+  { x: 40, y: 470, w: 230, t: 'query antiga, sem nota', k: 'mono' },
+  { x: 330, y: 560, w: 210, t: 'conversa no chat', k: 'meta' },
+  { x: 120, y: 650, w: 200, t: '"quem tem a versão certa?"', k: 'txt' },
+];
+const top = { x: 40, y: 60, w: 520, h: 290 };
+const bot = { x: 40, y: 450, w: 520, h: 290 };
+const slots = (b: typeof top, labels: string[]) => labels.map((l, i) => ({ l, x: b.x + 22 + (i % 3) * 164, y: b.y + 92 + Math.floor(i / 3) * 74, w: 148, h: 58 }));
+const topCards = slots(top, ['decisão', 'risco', 'pendência', 'fonte', 'síntese', 'análise']);
+const botCards = slots(bot, ['tabela', 'método', 'query', 'armadilha', 'análise', '']);
+// pontos que saem dos fragmentos e viram notas
+const fly: { fx: number; fy: number; x: number; y: number; t: number }[] = [];
+[...topCards, ...botCards.slice(0, 5)].forEach((c, i) => {
+  const f = frags[i % frags.length];
+  for (let k = 0; k < 4; k++) fly.push({ fx: f.x + 20 + k * 30, fy: f.y + 24, x: c.x + 18 + k * 10, y: c.y + 40, t: 1.05 + i * 0.03 + k * 0.01 });
+});
+const dotsRow = (x: number, y: number, n: number, sp = 7) => Array.from({ length: n }, (_, i) => `M${x + i * sp + 1.6} ${y}a1.6 1.6 0 1 0 -3.2 0a1.6 1.6 0 1 0 3.2 0`).join('');
+---
+<svg class="stg" viewBox="0 0 600 780" role="img" aria-labelledby="bv-t bv-d" data-stage-svg>
+  <title id="bv-t">Do contexto disperso a duas bases vivas</title>
+  <desc id="bv-d">Ilustração sintética. Primeiro, fragmentos espalhados: reuniões, planilhas, duas versões conflitantes de uma decisão. Depois, duas bases: gestão e análises (decisões, riscos, pendências, fontes) e conhecimento analítico (tabelas, métodos, queries, armadilhas). Uma nota mostra o estado vigente com fonte e o histórico superado. Por fim, uma análise usa as duas bases e devolve uma armadilha nova à base analítica, revisada pelo consultor.</desc>
+  <text x="560" y="34" class="st-meta" text-anchor="end">◇ ILUSTRAÇÃO SINTÉTICA</text>
+
+  <!-- 0 · disperso -->
+  <g data-out="1.25">
+    {frags.map((f, i) => (
+      <g data-in={(0.05 + i * 0.07).toFixed(2)}>
+        <rect x={f.x} y={f.y} width={f.w} height="40" rx="3" class="st-card" transform={`rotate(${(i % 2 ? 1.5 : -1.8)} ${f.x} ${f.y})`} />
+        <text x={f.x + 14} y={f.y + 25} class={f.k === 'meta' ? 'st-meta' : f.k === 'mono' ? 'st-mono' : 'st-sm'} transform={`rotate(${(i % 2 ? 1.5 : -1.8)} ${f.x} ${f.y})`}>{f.t}</text>
+      </g>
+    ))}
+    <g data-in="0.55"><text x="300" y="300" class="st-ser red-t" text-anchor="middle">≠</text></g>
+    <path d={dotsRow(380, 220, 14) + dotsRow(60, 410, 18) + dotsRow(300, 470, 9) + dotsRow(400, 690, 12)} class="st-grey" data-in="0.3" />
+  </g>
+
+  <!-- 1 · duas bases -->
+  <g data-in="1.05" data-d="0.35">
+    <rect x={top.x} y={top.y} width={top.w} height={top.h} class="st-stone" />
+    <text x={top.x + 22} y={top.y + 30} class="st-meta">BASE 1 · GESTÃO E ANÁLISES</text>
+    <text x={top.x + 22} y={top.y + 58} class="st-ser">O que está decidido, em risco ou pendente?</text>
+    <text x={top.x + 22} y={top.y + top.h - 16} class="st-meta">TRANSCRIÇÕES DE REUNIÃO ALIMENTAM O ESTADO</text>
+  </g>
+  <g data-in="1.15" data-d="0.35">
+    <rect x={bot.x} y={bot.y} width={bot.w} height={bot.h} class="st-stone2" />
+    <text x={bot.x + 22} y={bot.y + 30} class="st-meta">BASE 2 · CONHECIMENTO ANALÍTICO</text>
+    <text x={bot.x + 22} y={bot.y + 58} class="st-ser">Como analisar esta tabela corretamente?</text>
+    <text x={bot.x + 22} y={bot.y + bot.h - 16} class="st-meta">REPOSITÓRIO GITLAB · CLI DO DATABRICKS</text>
+  </g>
+  {[...topCards, ...botCards.slice(0, 5)].map((c, i) => (
+    <g data-in={(1.5 + i * 0.03).toFixed(2)}>
+      <rect x={c.x} y={c.y} width={c.w} height={c.h} rx="3" class="st-card" />
+      <text x={c.x + 12} y={c.y + 22} class="st-meta">{c.l.toUpperCase()}</text>
+      <path d={dotsRow(c.x + 14, c.y + 40, 12)} class="st-ink" />
+    </g>
+  ))}
+  {fly.map((d) => <circle cx={d.x} cy={d.y} r="2.2" class="st-ink" data-fly={d.t.toFixed(2)} data-fx={d.fx} data-fy={d.fy} data-out="1.55" />)}
+  <rect x={botCards[5].x} y={botCards[5].y} width={botCards[5].w} height={botCards[5].h} rx="3" class="st-thin" style="stroke-dasharray:3 4" data-in="1.6" />
+
+  <!-- 2 · o que vale hoje -->
+  <g data-in="2.05" data-out="3.0" data-d="0.35">
+    <rect x="70" y="92" width="460" height="246" rx="4" class="st-card-ink" />
+    <text x="92" y="122" class="st-meta">NOTA · DECISÃO</text>
+    <text x="92" y="150" class="st-ser">Início do piloto</text>
+  </g>
+  <g data-in="2.25" data-out="3.0">
+    <rect x="92" y="168" width="70" height="20" rx="10" class="st-chip-red" />
+    <text x="127" y="182" class="st-meta red" text-anchor="middle">VIGENTE</text>
+    <text x="176" y="183" class="st-sm">Piloto começa em abril</text>
+    <text x="176" y="203" class="st-meta">FONTE: REUNIÃO 14/MAR · VERIFICADO</text>
+  </g>
+  <g data-in="2.45" data-out="3.0">
+    <rect x="92" y="226" width="80" height="20" rx="10" class="st-chip" />
+    <text x="132" y="240" class="st-meta" text-anchor="middle">SUPERADO</text>
+    <text x="186" y="241" class="st-sm st-muted">Piloto em março</text>
+    <path d="M184 236 H300" class="st-line" pathLength="1" data-draw="2.55" style="stroke:var(--ink-3)" />
+    <text x="186" y="261" class="st-meta">FONTE: REUNIÃO 03/MAR · HISTÓRICO PRESERVADO</text>
+  </g>
+  <g data-in="2.65" data-out="3.0">
+    <path d="M92 284 H508" class="st-thin" />
+    <text x="92" y="310" class="st-meta">ÍNDICE CURTO → ABRIR SÓ O NECESSÁRIO</text>
+    <text x="508" y="310" class="st-meta" text-anchor="end">✓ LINKS VERIFICADOS POR SCRIPT</text>
+  </g>
+
+  <!-- 3 · de volta -->
+  <path d="M300 350 V372" class="st-dotline" data-in="3.1" data-out="3.9" />
+  <path d="M300 450 V428" class="st-dotline" data-in="3.15" data-out="3.9" />
+  <g data-in="3.05">
+    <rect x="160" y="372" width="280" height="56" rx="3" class="st-card-ink" />
+    <text x="176" y="396" class="st-meta">ANÁLISE</text>
+    <text x="176" y="416" class="st-sm">Acordos por faixa de atraso</text>
+  </g>
+  <path d={`M440 400 C 520 400, 540 470, ${botCards[5].x + botCards[5].w / 2} ${botCards[5].y - 4}`} class="st-rline st-draw" pathLength="1" data-draw="3.4" />
+  <g data-in="3.6">
+    <rect x={botCards[5].x} y={botCards[5].y} width={botCards[5].w} height={botCards[5].h} rx="3" class="st-redsoft" />
+    <text x={botCards[5].x + 12} y={botCards[5].y + 22} class="st-meta red">ARMADILHA NOVA</text>
+    <text x={botCards[5].x + 12} y={botCards[5].y + 42} class="st-xs">datas duplicadas</text>
+  </g>
+  <g data-in="3.75">
+    <text x={botCards[5].x + botCards[5].w} y={bot.y + bot.h + 22} class="st-meta" text-anchor="end">✓ REVISADO PELO CONSULTOR</text>
+  </g>
+  <g data-in="3.85"><text x="40" y="772" class="st-meta red">A ANÁLISE TERMINA. O APRENDIZADO FICA.</text></g>
+</svg>

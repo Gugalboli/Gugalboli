@@ -1,7 +1,9 @@
 ---
 import '../styles/base.css';
-interface Props { title: string; description?: string; }
-const { title, description = 'Gustavo Albuquerque — produto, dados e IA aplicada a problemas de negócio.' } = Astro.props;
+import serif400 from '@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url';
+import sans from '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url';
+interface Props { title: string; description?: string; noindex?: boolean; }
+const { title, description = 'Gustavo Albuquerque — produto, dados e IA aplicada a problemas de negócio.', noindex = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -11,7 +13,14 @@ const { title, description = 'Gustavo Albuquerque — produto, dados e IA aplica
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f5f2ed" />
-    <meta name="robots" content="noindex" />
+    <link rel="preload" href={serif400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sans} as="font" type="font/woff2" crossorigin />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.svg`} type="image/svg+xml" />
     <script is:inline>
       document.documentElement.classList.add('js');
@@ -23,19 +32,18 @@ const { title, description = 'Gustavo Albuquerque — produto, dados e IA aplica
     <slot />
     <button class="motion-toggle" type="button" aria-pressed="false" data-motion-toggle>Pausar movimento</button>
     <script>
-      const btn = document.querySelector<HTMLButtonElement>('[data-motion-toggle]')!;
+      const btns = [...document.querySelectorAll<HTMLButtonElement>('[data-motion-toggle]')];
       const root = document.documentElement;
       const sync = () => {
         const off = root.classList.contains('still');
-        btn.setAttribute('aria-pressed', String(off));
-        btn.textContent = off ? 'Retomar movimento' : 'Pausar movimento';
+        btns.forEach((btn) => { btn.setAttribute('aria-pressed', String(off)); btn.textContent = off ? 'Retomar movimento' : 'Pausar movimento'; });
       };
-      btn.addEventListener('click', () => {
+      btns.forEach((btn) => btn.addEventListener('click', () => {
         root.classList.toggle('still');
         try { localStorage.setItem('motion', root.classList.contains('still') ? 'off' : 'on'); } catch (e) {}
         sync();
         dispatchEvent(new CustomEvent('motionchange', { detail: root.classList.contains('still') }));
-      });
+      }));
       sync();
     </script>
   </body>

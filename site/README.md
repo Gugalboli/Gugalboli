@@ -1,6 +1,6 @@
 # Site — Gustavo Albuquerque
 
-Astro + TypeScript, estático. Estado atual: **Fase 2 — esqueleto navegável** (ver `DECISIONS.md` e `CONTENT.md`).
+Astro + TypeScript, estático. Estado atual: **completo (Fases 1–4)** (ver `DECISIONS.md` e `CONTENT.md`).
 
 ```bash
 npm install
@@ -13,3 +13,11 @@ node scripts/p2-shots.mjs http://localhost:4321      # capturas da página únic
 ```
 
 Páginas: `/` (site), `/entregas/<slug>/` (mesma página com a entrega aberta), `/estudos/` (Fase 1).
+
+## Publicar
+
+**GitHub Pages (pronto):** o workflow `.github/workflows/deploy-site.yml` publica a cada push em `main` que mexa em `site/` (ou manualmente em Actions → "Publicar site"). Uma vez só: Settings → Pages → Source: **GitHub Actions**. Endereço: `https://<usuario>.github.io/<repo>/`.
+
+**Vercel (alternativa):** importar o repositório, Root Directory `site`, framework Astro, sem variáveis (o site fica na raiz).
+
+**Domínio próprio:** apontar o domínio, e no workflow trocar `SITE_BASE` para `/`.

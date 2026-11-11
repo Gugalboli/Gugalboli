@@ -1,7 +1,9 @@
 ---
 /** Conteúdo de uma entrega: síntese no topo → narrativa com palco persistente → fechamento com números qualificados. */
-import Art from './Art.astro';
 import MermaidStage from './MermaidStage.astro';
+import BaseVivaStage from './stages/BaseVivaStage.astro';
+import SpeechStage from './stages/SpeechStage.astro';
+import ComentariosStage from './stages/ComentariosStage.astro';
 interface N { valor: string; descricao: string; natureza: string[] }
 interface Props { e: any; idx: number; total: number; prev: any; next: any; base: string }
 const { e, idx, prev, next, base } = Astro.props;
@@ -22,12 +24,11 @@ const isMermaid = e.slug === 'tradutor-mermaid';
 <section class="p-story" data-story-panel aria-label="Como funciona">
   <div class="p-stage-col">
     <div class="p-stage" data-stage-wrap>
-      {isMermaid ? <MermaidStage /> : (
-        <figure class="p-art" data-step="-1" data-art-steps>
-          <div class="p-art-shared" data-vt-art><Art slug={e.slug} /></div>
-          <figcaption class="illus">Ilustração esquemática — o palco animado desta entrega chega na próxima fase.</figcaption>
-        </figure>
-      )}
+      {isMermaid && <MermaidStage />}
+      {e.slug === 'base-viva' && <BaseVivaStage />}
+      {e.slug === 'speech-analytics' && <SpeechStage />}
+      {e.slug === 'motor-comentarios' && <ComentariosStage />}
+
     </div>
   </div>
   <ol class="p-steps">

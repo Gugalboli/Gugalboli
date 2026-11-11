@@ -1,6 +1,6 @@
 # Decisões de design — portfólio Gustavo Albuquerque
 
-Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado: **Fase 2 (esqueleto navegável), aguardando avaliação do Gustavo.** Fase 1 aprovada como mistura A+B, sem foto.
+Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado: **Fases 1–4 concluídas.** Fase 1 aprovada como mistura A+B, sem foto; Gustavo autorizou seguir sem novas validações.
 
 ## Fase 0 — suposições declaradas (sem bloqueio)
 
@@ -57,8 +57,27 @@ Registro vivo. Cada decisão tem a razão e a referência que a motivou. Estado:
 - **D-25 Barra superior aparece só depois da abertura**, para não competir com a primeira tela.
 - **D-26 Estudos da Fase 1 preservados em `/estudos/`.**
 
-## Em aberto (para a Fase 3)
+## Em aberto após a Fase 2 (resolvido nas Fases 3–4)
 
 - Palcos próprios de base viva, speech analytics e comentários (hoje: ilustração revelada por camadas, com legenda dizendo isso).
 - Arte da abertura sem JS (SVG estático) e grão discreto.
 - Texto do "Sobre" é rascunho, marcado na página para revisão do Gustavo.
+
+## Fase 3 — narrativas visuais
+
+- **D-27 Quatro palcos, quatro mecanismos.** Todos em SVG 600 × 780 (vertical, legível no celular), com o mesmo vocabulário (planos neutros, retícula de pontos, um objeto vermelho), mas cenas diferentes:
+  - *Base viva:* fragmentos espalhados (com "≠" entre duas versões da mesma decisão) → os pontos voam para dois domínios (gestão/análises; conhecimento analítico) e viram notas → uma nota mostra **vigente com fonte** e **superado preservado** → uma análise puxa das duas bases e devolve uma "armadilha nova", revisada pelo consultor.
+  - *Speech analytics:* tabela de transcrições sem leitura → uma conversa é lida por ~15 perguntas → tabela refinada → duas saídas (dashboard e causa raiz) → exemplo do travamento ("Estou verificando…" repetido, em vermelho) e backlog priorizado. Sem onda de áudio: a entrada era uma tabela.
+  - *Comentários:* duas leituras opostas (≠) → o mesmo comentário, "marcado: neutro", passa pelo motor e sai negativo / demora no retorno → circuito de avaliação (revisão humana, segundo modelo, pior quartil como triagem, ajuste de prompt) → ligação vermelha ao incentivo; "desenho, não pessoas".
+  - *Tradutor:* mantém a cena da Fase 1.
+- **D-28 Linha do tempo declarativa (`src/lib/stage-tl.ts`).** Cada elemento diz quando entra, sai, é desenhado ou voa (`data-in`, `data-out`, `data-draw`, `data-fly`). A rolagem do painel percorre a linha 0 → 4 com suavização; ao subir, a cena recua. Com movimento reduzido, cada passo mostra seu estado final. Sem JS, só o estado final aparece.
+- **D-29 Todo conteúdo dos palcos é sintético e rotulado "◇ Ilustração sintética"** no próprio palco; números reais só aparecem no fechamento, fora da arte.
+
+## Fase 4 — acabamento e QA
+
+- **D-30 Desempenho.** CSS embutido no HTML (sem pedido bloqueante), Newsreader estático 400/400 itálico no lugar do variável (≈280 KB → ≈50 KB), pré-carregamento das duas fontes do primeiro quadro. Lighthouse (celular, 4G simulado): home 99 / LCP 2,1 s / CLS 0; entrega 96 / LCP 2,2 s.
+- **D-31 Pausa de movimento também dentro do painel** (o `<dialog>` modal cobre o botão flutuante). A preferência é a mesma e fica salva.
+- **D-32 Arte da abertura sem JS:** SVG estático com a mesma composição (viga de pontos, fulcro vermelho, figura, esfera).
+- **D-33 Grão discreto** (ruído SVG a 5%, multiplicado) só sobre o palco da escultura; a interface fica limpa.
+- **D-34 Indexação.** Site indexável com metadados Open Graph; estudos da Fase 1 com `noindex` e fora da navegação pública.
+- **D-35 Publicação.** Workflow de GitHub Pages (`.github/workflows/deploy-site.yml`) com `SITE_BASE=/<repo>`; testado localmente sob subpasta (e2e completo passou). Sem domínio comprado.

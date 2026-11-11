@@ -7,6 +7,7 @@
  */
 import { scrolly, reducedMotion } from './scrolly';
 import { initMermaid } from './mermaid-stage';
+import { buildStage } from './stage-tl';
 
 interface Hooks { onOpen?: () => void; onClose?: () => void }
 
@@ -17,6 +18,8 @@ export function initSheet(h: Hooks = {}) {
   const order = [...panels.keys()];
   const count = sheet.querySelector<HTMLElement>('[data-count]')!;
   const inited = new Set<string>();
+  const updaters: (() => void)[] = [];
+  addEventListener('motionchange', () => updaters.forEach((u) => u()));
   let current: string | null = null;
   let opener: HTMLElement | null = null;
   let pushedByUs = false;
@@ -46,14 +49,16 @@ export function initSheet(h: Hooks = {}) {
     if (inited.has(slug) || !steps.length) { requestAnimationFrame(() => sheet.dispatchEvent(new Event('scroll'))); return; }
     inited.add(slug);
     const mm = panel.querySelector<SVGSVGElement>('[data-stage]');
-    const stage = mm ? initMermaid(mm) : null;
+    const gen = panel.querySelector<SVGSVGElement>('[data-stage-svg]');
+    const stage = mm ? initMermaid(mm) : gen ? buildStage(gen) : null;
     const art = panel.querySelector<HTMLElement>('[data-art-steps]');
-    scrolly(steps, sheet, (p, active) => {
+    const sc = scrolly(steps, sheet, (p, active) => {
       if (panel.hidden) return;
       steps.forEach((s, i) => s.classList.toggle('is-active', i === active));
       if (art) art.dataset.step = String(active);
       if (stage) stage.seek(reducedMotion() ? (active < 0 ? 0 : active + 1) : p, !reducedMotion());
     });
+    updaters.push(sc.update);
   }
 
   function lock(on: boolean) {

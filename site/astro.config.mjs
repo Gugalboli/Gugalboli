@@ -5,5 +5,5 @@ export default defineConfig({
   site: 'https://example.invalid',
   base: process.env.SITE_BASE || '/',
   trailingSlash: 'ignore',
-  build: { format: 'directory' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
 });

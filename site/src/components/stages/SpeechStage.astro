@@ -1,0 +1,101 @@
+---
+/** Palco — Speech analytics. Passos: às cegas → perguntas → duas saídas → o achado. */
+import '../../styles/stage.css';
+const rows = [0, 1, 2, 3, 4];
+const qs = [
+  { q: 'Travou?', a: 'sim' },
+  { q: 'Motivo da recusa', a: 'valor' },
+  { q: 'Por que não negociou?', a: 'sem retorno' },
+  { q: 'Polaridade', a: 'negativa' },
+  { q: 'Faltou base de conhecimento?', a: 'não' },
+];
+const dotsRow = (x: number, y: number, n: number, sp = 7, r = 1.6) => Array.from({ length: n }, (_, i) => `M${x + i * sp + r} ${y}a${r} ${r} 0 1 0 ${-2 * r} 0a${r} ${r} 0 1 0 ${2 * r} 0`).join('');
+const cells = (x: number, y: number) => {
+  // tabela refinada: 3 colunas × 6 linhas; a primeira coluna (travou) marca algumas linhas
+  const out: { x: number; y: number; red: boolean }[] = [];
+  for (let r = 0; r < 6; r++) for (let c = 0; c < 3; c++) out.push({ x: x + 22 + c * 74, y: y + 74 + r * 30, red: c === 0 && [0, 2, 3].includes(r) });
+  return out;
+};
+const ref = { x: 322, y: 290, w: 248, h: 280 };
+---
+<svg class="stg" viewBox="0 0 600 780" role="img" aria-labelledby="sp-t sp-d" data-stage-svg>
+  <title id="sp-t">Das transcrições às duas leituras e ao backlog</title>
+  <desc id="sp-d">Ilustração sintética. Uma tabela de transcrições sem leitura sistemática. Uma conversa é lida por cerca de quinze perguntas — travou, motivo da recusa, por que não negociou, polaridade, falta de base de conhecimento — e as respostas formam uma tabela refinada. Dela saem um dashboard de acompanhamento e uma tabela de causa raiz. Um exemplo mostra o agente repetindo "estou verificando" sem avançar; as melhorias viram um backlog priorizado.</desc>
+  <text x="560" y="24" class="st-meta" text-anchor="end">◇ ILUSTRAÇÃO SINTÉTICA</text>
+
+  <!-- 0 · tabela de transcrições -->
+  <g data-in="0.05">
+    <rect x="30" y="40" width="540" height="222" rx="4" class="st-card" />
+    <text x="50" y="66" class="st-meta">TABELA DE TRANSCRIÇÕES · AGENTE DE COBRANÇA</text>
+  </g>
+  {rows.map((r) => (
+    <g data-in={(0.15 + r * 0.08).toFixed(2)}>
+      <text x="50" y={100 + r * 32} class="st-mono st-muted">conversa_{1040 + r * 7}</text>
+      <path d={dotsRow(190, 96 + r * 32, 46, 7, 1.5)} class="st-grey" />
+    </g>
+  ))}
+  <g data-in="0.6" data-out="1.1"><text x="300" y="282" class="st-meta" text-anchor="middle">◌ NINGUÉM LIA AS CONVERSAS DE FORMA SISTEMÁTICA</text></g>
+
+  <!-- 1 · perguntas por conversa -->
+  <rect x="40" y="152" width="520" height="26" rx="3" class="st-redsoft"  data-in="1.05" />
+  <path d="M120 178 V290" class="st-rline st-draw" pathLength="1" data-draw="1.1" />
+  <g data-in="1.15" data-out="3.0">
+    <rect x="30" y="290" width="276" height="280" rx="4" class="st-card-ink" />
+    <text x="48" y="316" class="st-meta">≈15 PERGUNTAS POR CONVERSA</text>
+  </g>
+  {qs.map((q, i) => (
+    <g data-in={(1.2 + i * 0.07).toFixed(2)} data-out="3.0">
+      <text x="48" y={352 + i * 38} class="st-sm">{q.q}</text>
+      <g data-in={(1.5 + i * 0.06).toFixed(2)}>
+        <rect x="190" y={337 + i * 38} width={q.a.length * 7.6 + 18} height="22" rx="11" class={i === 0 || i === 3 ? 'st-chip-red' : 'st-chip'} />
+        <text x={199} y={352 + i * 38} class={`st-mono ${i === 0 || i === 3 ? 'red-t' : ''}`}>{q.a}</text>
+      </g>
+    </g>
+  ))}
+  <g data-in="1.6" data-out="3.0"><text x="48" y="550" class="st-meta">+ OUTRAS ~10 · MODELO INTERNO VIA SQL</text></g>
+
+  <g data-in="1.7" data-out="3.5">
+    <rect x={ref.x} y={ref.y} width={ref.w} height={ref.h} rx="4" class="st-card-ink" />
+    <text x={ref.x + 18} y={ref.y + 26} class="st-meta">TABELA REFINADA · DATABRICKS</text>
+    <text x={ref.x + 22} y={ref.y + 54} class="st-meta">TRAVOU</text>
+    <text x={ref.x + 96} y={ref.y + 54} class="st-meta">RECUSA</text>
+    <text x={ref.x + 170} y={ref.y + 54} class="st-meta">POLAR.</text>
+  </g>
+  {cells(ref.x, ref.y).map((c, i) => <circle cx={c.x + 8} cy={c.y} r={c.red ? 5 : 3.2} class={c.red ? 'st-red' : 'st-ink'} data-in={(1.8 + (i % 18) * 0.01).toFixed(2)} data-out="3.5" />)}
+
+  <!-- 2 · duas saídas -->
+  <path d={`M${ref.x + 60} ${ref.y + ref.h} V612`} class="st-line st-draw" pathLength="1" data-draw="2.05" />
+  <path d={`M${ref.x + 190} ${ref.y + ref.h} V612`} class="st-line st-draw" pathLength="1" data-draw="2.1" />
+  <g data-in="2.2">
+    <rect x="30" y="612" width="260" height="148" rx="4" class="st-card" />
+    <text x="48" y="638" class="st-meta">DASHBOARD · GESTÃO</text>
+    {[38, 62, 50, 74, 58, 82, 70].map((v, i) => <rect x={50 + i * 30} y={740 - v} width="18" height={v} class="st-ink" />)}
+    <path d="M50 690 L80 680 L110 686 L140 668 L170 672 L200 660 L230 664" class="st-rline" />
+  </g>
+  <g data-in="2.35">
+    <rect x="310" y="612" width="260" height="148" rx="4" class="st-card" />
+    <text x="328" y="638" class="st-meta">CAUSA RAIZ · ANALISTAS</text>
+    {[0, 1, 2, 3].map((r) => <g><path d={dotsRow(330, 666 + r * 24, 18, 7, 1.5)} class="st-ink" /><text x="552" y={671 + r * 24} class="st-meta" text-anchor="end">→ EXEMPLO</text></g>)}
+  </g>
+
+  <!-- 3 · o achado -->
+  <g data-in="3.05">
+    <rect x="30" y="290" width="276" height="280" rx="4" class="st-card-ink" />
+    <text x="48" y="316" class="st-meta">EXEMPLO DE CONVERSA</text>
+  </g>
+  <g data-in="3.12"><rect x="48" y="332" width="210" height="42" rx="12" class="st-stone" /><text x="62" y="350" class="st-xs">Posso te ajudar a negociar.</text><text x="62" y="366" class="st-xs">Confirma seu nome?</text></g>
+  <g data-in="3.22"><rect x="120" y="386" width="168" height="30" rx="12" class="st-card-ink" /><text x="134" y="406" class="st-xs">Confirmo, sou eu.</text></g>
+  <g data-in="3.34"><rect x="48" y="428" width="168" height="30" rx="12" class="st-redsoft" /><text x="62" y="448" class="st-xs red-t">Estou verificando…</text></g>
+  <g data-in="3.46"><rect x="48" y="468" width="168" height="30" rx="12" class="st-redsoft" /><text x="62" y="488" class="st-xs red-t">Estou verificando…</text></g>
+  <g data-in="3.56"><text x="48" y="530" class="st-meta red">SEM AVANÇO APÓS A RESPOSTA</text><text x="48" y="550" class="st-meta">DIAGNÓSTICO INICIAL DO FLUXO</text></g>
+  <g data-in="3.6">
+    <rect x={ref.x} y={ref.y} width={ref.w} height={ref.h} rx="4" class="st-card-ink" />
+    <text x={ref.x + 18} y={ref.y + 26} class="st-meta">BACKLOG PRIORIZADO</text>
+  </g>
+  {['fluxo de verificação', 'tratamento de espera', 'integração de consulta', 'base de conhecimento', '…'].map((b, i) => (
+    <g data-in={(3.68 + i * 0.05).toFixed(2)}>
+      <rect x={ref.x + 18} y={ref.y + 44 + i * 44} width={ref.w - 36} height="34" rx="3" class={i === 0 ? 'st-redsoft' : 'st-chip'} />
+      <text x={ref.x + 32} y={ref.y + 66 + i * 44} class={`st-xs ${i === 0 ? 'red-t' : ''}`}>{b}</text>
+    </g>
+  ))}
+</svg>

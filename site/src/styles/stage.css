@@ -1,0 +1,28 @@
+/* Palcos das entregas (SVG 600 × 780). Classes .st-* compartilhadas. */
+.stg { width: 100%; height: 100%; max-height: 88svh; overflow: visible; }
+.stg text { font-family: var(--sans); font-size: 15px; fill: var(--ink); }
+.stg .st-meta { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; fill: var(--ink-3); }
+.stg .st-meta.red, .stg .red-t { fill: var(--red); }
+.stg .st-sm { font-size: 13px; }
+.stg .st-xs { font-size: 12px; }
+.stg .st-mono { font-family: var(--mono); font-size: 12px; }
+.stg .st-muted { fill: var(--ink-3); }
+.stg .st-ser { font-family: var(--serif); font-size: 17px; font-style: italic; }
+.st-card { fill: #fffdf9; stroke: var(--line); }
+.st-card-ink { fill: #fffdf9; stroke: var(--ink); stroke-width: 1.2; }
+.st-stone { fill: var(--stone); }
+.st-stone2 { fill: #d5cec3; }
+.st-paper2 { fill: var(--paper-2); }
+.st-ink { fill: var(--ink); }
+.st-grey { fill: #b9b2a8; }
+.st-red { fill: var(--red); }
+.st-redsoft { fill: #fbf1ef; stroke: var(--red); stroke-width: 1.2; }
+.st-line { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.st-thin { fill: none; stroke: var(--line); stroke-width: 1; }
+.st-rline { fill: none; stroke: var(--red); stroke-width: 1.6; }
+.st-dotline { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 0.1 6; }
+.st-draw { stroke-dasharray: 1; }
+.st-chip { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.st-chip-red { fill: var(--paper); stroke: var(--red); stroke-width: 1.2; }
+/* sem JS: mostra só o estado final (elementos transitórios somem) */
+html:not(.js) .stg [data-out] { display: none; }

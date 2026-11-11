@@ -1,0 +1,87 @@
+---
+/** Palco — Motor de análise de comentários. Passos: duas leituras → leitura → avaliação → a causa. */
+import '../../styles/stage.css';
+const cx = 300, cy = 668, R = 76;
+const nodes = [
+  { a: -90, t: 'revisão humana' },
+  { a: 0, t: 'segundo modelo' },
+  { a: 90, t: 'pior quartil · triagem' },
+  { a: 180, t: 'ajuste de prompt' },
+];
+const pt = (a: number, r = R) => ({ x: cx + Math.cos((a * Math.PI) / 180) * r, y: cy + Math.sin((a * Math.PI) / 180) * r });
+const ringDots = Array.from({ length: 30 }, (_, i) => ({ ...pt((i / 30) * 360 - 90), t: 2.45 + i * 0.004 }));
+---
+<svg class="stg" viewBox="0 0 600 780" role="img" aria-labelledby="cm-t cm-d" data-stage-svg>
+  <title id="cm-t">Duas leituras, um motor, um circuito de avaliação e a causa</title>
+  <desc id="cm-d">Ilustração sintética. À esquerda, o indicador do atendimento mostra quase tudo positivo ou neutro; à direita, a leitura do marketing mostra atrito alto. O mesmo comentário, marcado como neutro, passa pelo motor em Python com LLM e sai como polaridade negativa e tema demora no retorno. Um circuito de avaliação gira entre revisão humana, segundo modelo, pior quartil como triagem e ajuste de prompt. Por fim, uma ligação vermelha mostra que o preenchimento do indicador estava ligado à remuneração variável, cujos parâmetros a equipe revisou.</desc>
+  <text x="560" y="24" class="st-meta" text-anchor="end">◇ ILUSTRAÇÃO SINTÉTICA</text>
+
+  <!-- 0 · duas leituras -->
+  <g data-in="0.05">
+    <path d="M30 44 L284 56 L284 282 L30 294 Z" class="st-stone" />
+    <text x="48" y="78" class="st-meta">INDICADOR DO ATENDIMENTO</text>
+    {[['positivo', 150], ['neutro', 120], ['negativo', 26]].map(([l, v], i) => (
+      <g><text x="48" y={124 + i * 52} class="st-xs">{l}</text><rect x="120" y={110 + i * 52} width={v} height="20" class="st-ink" /></g>
+    ))}
+  </g>
+  <g data-in="0.2">
+    <path d="M570 44 L316 56 L316 282 L570 294 Z" class="st-stone2" />
+    <text x="552" y="78" class="st-meta" text-anchor="end">LEITURA DO MARKETING</text>
+    {[['atrito', 170], ['elogio', 40], ['dúvida', 70]].map(([l, v], i) => (
+      <g><text x="552" y={124 + i * 52} class="st-xs" text-anchor="end">{l}</text><rect x={480 - (v as number)} y={110 + i * 52} width={v} height="20" class="st-ink" /></g>
+    ))}
+  </g>
+  <g data-in="0.4"><text x="300" y="180" class="st-ser red-t" text-anchor="middle">≠</text></g>
+  <g data-in="0.55" data-out="3.0">
+    <rect x="90" y="316" width="420" height="82" rx="4" class="st-card-ink" />
+    <text x="110" y="346" class="st-sm">“Já mandei mensagem três vezes e</text>
+    <text x="110" y="368" class="st-sm">ninguém resolve.”</text>
+    <rect x="370" y="356" width="124" height="22" rx="11" class="st-chip" />
+    <text x="380" y="371" class="st-mono">marcado: neutro</text>
+    <path d="M376 367 H488" class="st-rline st-draw" pathLength="1" data-draw="1.7" />
+  </g>
+
+  <!-- 1 · leitura -->
+  <path d="M300 398 V430" class="st-line st-draw" pathLength="1" data-draw="1.05" />
+  <g data-in="1.1">
+    <rect x="180" y="430" width="240" height="56" rx="4" class="st-paper2" style="stroke:var(--ink);stroke-width:1.2" />
+    <text x="300" y="455" class="st-meta" text-anchor="middle">MOTOR · PYTHON + LLM</text>
+    <text x="300" y="475" class="st-xs st-muted" text-anchor="middle">lê o conteúdo real</text>
+  </g>
+  <g data-in="1.4">
+    <rect x="96" y="508" width="190" height="26" rx="13" class="st-chip-red" />
+    <text x="191" y="526" class="st-mono red-t" text-anchor="middle">polaridade: negativa</text>
+  </g>
+  <g data-in="1.55">
+    <rect x="304" y="508" width="208" height="26" rx="13" class="st-chip" />
+    <text x="408" y="526" class="st-mono" text-anchor="middle">tema: demora no retorno</text>
+  </g>
+
+  <!-- 2 · circuito de avaliação -->
+  <circle cx={cx} cy={cy} r={R} class="st-thin" pathLength="1" data-in="2.05" />
+  {ringDots.map((d) => <circle cx={d.x.toFixed(1)} cy={d.y.toFixed(1)} r="2" class="st-ink" data-fly={d.t.toFixed(3)} data-fx={cx} data-fy={cy - R} />)}
+  {nodes.map((n, i) => {
+    const p = pt(n.a);
+    const anchor = n.a === 0 ? 'start' : n.a === 180 ? 'end' : 'middle';
+    const dx = n.a === 0 ? 14 : n.a === 180 ? -14 : 0;
+    const dy = n.a === -90 ? -12 : n.a === 90 ? 24 : 5;
+    return (
+      <g data-in={(2.15 + i * 0.08).toFixed(2)}>
+        <circle cx={p.x} cy={p.y} r="7" class={i === 2 ? 'st-red' : 'st-ink'} />
+        <text x={p.x + dx} y={p.y + dy} class="st-xs" text-anchor={anchor}>{n.t}</text>
+      </g>
+    );
+  })}
+  <g data-in="2.5"><text x={cx} y={cy + 4} class="st-meta" text-anchor="middle">A CADA VOLTA</text></g>
+
+  <!-- 3 · a causa -->
+  <g data-in="3.05">
+    <rect x="90" y="316" width="420" height="82" rx="4" class="st-redsoft" />
+    <text x="110" y="344" class="st-meta red">O QUE A DIVERGÊNCIA REVELOU</text>
+    <text x="110" y="368" class="st-sm">O preenchimento do indicador estava</text>
+    <text x="110" y="387" class="st-sm">ligado à remuneração variável.</text>
+  </g>
+  <path d="M150 294 V316" class="st-rline st-draw" pathLength="1" data-draw="3.15" />
+  <g data-in="3.5"><text x="510" y="420" class="st-meta" text-anchor="end">✓ PARÂMETROS DA REMUNERAÇÃO REVISTOS PELA EQUIPE</text></g>
+  <g data-in="3.7"><text x="90" y="420" class="st-meta red">DESENHO, NÃO PESSOAS</text></g>
+</svg>

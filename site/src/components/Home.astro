@@ -24,7 +24,17 @@ const artText = [
   'Três placas de pontos empilhadas sobre uma base vermelha, ao lado de uma figura; um fluxo de pontos sai para a direita, rotulado em uso.',
   'Os pontos formam um anel com uma seta vermelha; no centro, uma grade densa de pontos acumulados.',
 ];
-const year = (v: number) => Math.floor(v);
+// arte estática da alavanca (sem JavaScript): mesma composição da escultura
+const sv = (() => {
+  const out: string[] = [];
+  const dot = (x: number, y: number, r: number) => out.push(`M${(x + r).toFixed(1)} ${y.toFixed(1)}a${r} ${r} 0 1 0 ${-2 * r} 0a${r} ${r} 0 1 0 ${2 * r} 0`);
+  const a = -0.085, c = Math.cos(a), sn = Math.sin(a), fx = 474, ay = 236;
+  for (let v = 0; v < 3; v++) for (let u = -400; u < 220; u += 8.5) dot(fx + u * c + (v * 8.5 + 4) * sn, ay + u * sn - (v * 8.5 + 4) * c, 2.1);
+  for (let y = -60; y <= 60; y += 7.4) for (let x = -60; x <= 60; x += 8.5) { const d = (x * x + y * y) / 3600; if (d <= 1) dot(640 + x, 120 + y, 1.2 + 2 * (x + y + 120) / 240); }
+  const px = 100, py = 265;
+  for (let y = 0; y < 14; y++) for (let x = -2; x <= 2; x++) if (!(y < 4 && Math.abs(x) > 1)) dot(px + x * 5, py - 100 + y * 7, 1.6);
+  return out.join('');
+})();
 const tl0 = 2021.5, tl1 = 2027;
 const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
 ---
@@ -67,7 +77,9 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
           </div>
         </div>
 
-        <div class="art-box" data-art-box aria-hidden="true"></div>
+        <div class="art-box" data-art-box aria-hidden="true">
+          <svg class="nojs-art" viewBox="0 0 760 345" focusable="false"><path d={sv} fill="#1b1918" /><path d="M474 238 L526 330 L422 330 Z" fill="#910808" /><path d="M70 330.5 H880" stroke="#1b1918" /></svg>
+        </div>
 
         <div class="eq" role="group" aria-labelledby="eq-cap">
           <div class="key key-t"><span class="sym serif">t</span><span>esforço — o mesmo, sempre</span></div>
@@ -215,7 +227,7 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
       <a class="big-link serif" href={`mailto:${c.contato.email}`}>{c.contato.email}</a>
       <a class="btn" href={c.contato.linkedin} rel="me noopener">LinkedIn</a>
     </p>
-    <p class="foot mono">Rio de Janeiro · site feito com Astro, Canvas e muito pouco JavaScript · <a href={`${base}/estudos/`}>estudos de direção (fase 1)</a></p>
+    <p class="foot mono">Rio de Janeiro · site feito com Astro, Canvas e muito pouco JavaScript</p>
   </section>
 </main>
 
@@ -223,7 +235,7 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
 <dialog class="sheet" data-sheet open={openE ? true : undefined} aria-labelledby={openE ? `t-${openE.slug}` : undefined}>
   <div class="sheet-bar">
     <a href={`${base}/#entregas`} class="sheet-back" data-close>← Entregas</a>
-    <span class="mono sheet-count" data-count>{openE ? `0${openE.ordem} / 04` : ''}</span>
+    <span class="sheet-mid"><span class="mono sheet-count" data-count>{openE ? `0${openE.ordem} / 04` : ''}</span><button type="button" class="sheet-motion mono" aria-pressed="false" data-motion-toggle>Pausar movimento</button></span>
     <a href={`${base}/#entregas`} class="sheet-x" data-close aria-label="Fechar entrega">Fechar <span aria-hidden="true">✕</span></a>
   </div>
   {entregas.map((e, i) => (
@@ -246,6 +258,8 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
   .story { position: relative; }
   .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
   .art { width: 100%; height: 100%; touch-action: pan-y; }
+  .stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
   .labels { position: absolute; inset: 0; pointer-events: none; }
   .labels :global(span) { position: absolute; left: 0; top: 0; font: 500 .72rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
   .labels :global(span.ink) { color: var(--ink); }
@@ -276,7 +290,9 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
   .btn:hover { background: var(--ink); color: var(--paper); }
   .btn--ink { background: var(--ink); color: var(--paper); }
   .btn--ink:hover { background: var(--red); border-color: var(--red); }
-  .art-box { min-height: 250px; }
+  .art-box { min-height: 250px; position: relative; }
+  .nojs-art { display: none; }
+  :global(html:not(.js)) .nojs-art { display: block; position: absolute; inset: 0; margin: auto; height: 100%; max-width: 100%; }
   .eq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 24px; border-top: 1px solid var(--line); padding-top: 10px; }
   .key { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; font-size: .88rem; color: var(--ink-2); }
   .key-l { text-align: left; }
@@ -392,6 +408,10 @@ const pos = (v: number) => ((v - tl0) / (tl1 - tl0)) * 100;
   .sheet-x { border: 1px solid var(--ink); border-radius: 999px; padding: 7px 12px; }
   .sheet-x:hover { background: var(--ink); color: var(--paper); }
   .sheet-count { color: var(--ink-3); }
+  .sheet-mid { display: flex; gap: 14px; align-items: center; }
+  .sheet-motion { font-size: .72rem; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; cursor: pointer; color: var(--ink); }
+  .sheet-motion[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  @media (max-width: 480px) { .sheet-count { display: none; } }
   :global(html.sheet-open) { overflow: hidden; }
   .sheet[open].is-entering { animation: sheet-in .45s var(--ease); }
   @keyframes sheet-in { from { opacity: 0; transform: translateY(24px); } }
