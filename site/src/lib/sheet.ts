@@ -25,11 +25,14 @@ export function initSheet(h: Hooks = {}) {
   let pushedByUs = false;
   let savedY = 0;
 
+  // modo hash: usado na prévia embutida (um único arquivo, sem caminhos por entrega)
+  const hashMode = document.documentElement.dataset.urls === 'hash';
   const slugFromPath = (path = location.pathname) => {
+    if (hashMode) { const h = location.hash.match(/^#entrega-([a-z-]+)$/); return h && panels.has(h[1]) ? h[1] : null; }
     const m = path.match(/\/entregas\/([^/]+)\/?$/);
     return m && panels.has(m[1]) ? m[1] : null;
   };
-  const urlFor = (slug: string) => `${base}/entregas/${slug}/`;
+  const urlFor = (slug: string) => (hashMode ? `#entrega-${slug}` : `${base}/entregas/${slug}/`);
   const cardArt = (slug: string) => document.querySelector<HTMLElement>(`[data-card-art="${slug}"]`);
   const panelArt = (slug: string) => panels.get(slug)!.querySelector<HTMLElement>('[data-vt-art], [data-stage-wrap]');
   const canVT = () => 'startViewTransition' in document && !reducedMotion();
@@ -113,7 +116,7 @@ export function initSheet(h: Hooks = {}) {
     } else finish();
     if (!opts.fromPop) {
       if (pushedByUs) { pushedByUs = false; history.back(); } // a entrada que criamos sai do histórico
-      else history.replaceState({}, '', `${base}/#entregas`); // chegou direto pela URL da entrega
+      else history.replaceState({}, '', hashMode ? '#entregas' : `${base}/#entregas`); // chegou direto pela URL da entrega
     }
   }
 

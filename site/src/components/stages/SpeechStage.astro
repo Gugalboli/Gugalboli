@@ -5,7 +5,7 @@ const rows = [0, 1, 2, 3, 4];
 const qs = [
   { q: 'Travou?', a: 'sim' },
   { q: 'Motivo da recusa', a: 'valor' },
-  { q: 'Por que não negociou?', a: 'sem retorno' },
+  { q: 'Por que não negociou?', a: 'prazo' },
   { q: 'Polaridade', a: 'negativa' },
   { q: 'Faltou base de conhecimento?', a: 'não' },
 ];
@@ -37,7 +37,7 @@ const ref = { x: 322, y: 290, w: 248, h: 280 };
   <g data-in="0.6" data-out="1.1"><text x="300" y="282" class="st-meta" text-anchor="middle">◌ NINGUÉM LIA AS CONVERSAS DE FORMA SISTEMÁTICA</text></g>
 
   <!-- 1 · perguntas por conversa -->
-  <rect x="40" y="152" width="520" height="26" rx="3" class="st-redsoft"  data-in="1.05" />
+  <rect x="40" y="152" width="520" height="26" rx="3" class="st-rline"  data-in="1.05" />
   <path d="M120 178 V290" class="st-rline st-draw" pathLength="1" data-draw="1.1" />
   <g data-in="1.15" data-out="3.0">
     <rect x="30" y="290" width="276" height="280" rx="4" class="st-card-ink" />
@@ -45,14 +45,14 @@ const ref = { x: 322, y: 290, w: 248, h: 280 };
   </g>
   {qs.map((q, i) => (
     <g data-in={(1.2 + i * 0.07).toFixed(2)} data-out="3.0">
-      <text x="48" y={352 + i * 38} class="st-sm">{q.q}</text>
+      <text x="48" y={352 + i * 38} class="st-xs">{q.q}</text>
       <g data-in={(1.5 + i * 0.06).toFixed(2)}>
-        <rect x="190" y={337 + i * 38} width={q.a.length * 7.6 + 18} height="22" rx="11" class={i === 0 || i === 3 ? 'st-chip-red' : 'st-chip'} />
-        <text x={199} y={352 + i * 38} class={`st-mono ${i === 0 || i === 3 ? 'red-t' : ''}`}>{q.a}</text>
+        <rect x="222" y={337 + i * 38} width={q.a.length * 7.6 + 18} height="22" rx="11" class={i === 0 || i === 3 ? 'st-chip-red' : 'st-chip'} />
+        <text x={231} y={352 + i * 38} class={`st-mono ${i === 0 || i === 3 ? 'red-t' : ''}`}>{q.a}</text>
       </g>
     </g>
   ))}
-  <g data-in="1.6" data-out="3.0"><text x="48" y="550" class="st-meta">+ OUTRAS ~10 · MODELO INTERNO VIA SQL</text></g>
+  <g data-in="1.6" data-out="3.0"><text x="48" y="550" class="st-meta">+ ~10 PERGUNTAS · MODELO INTERNO</text></g>
 
   <g data-in="1.7" data-out="3.5">
     <rect x={ref.x} y={ref.y} width={ref.w} height={ref.h} rx="4" class="st-card-ink" />
